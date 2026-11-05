@@ -266,24 +266,51 @@ a { color: inherit; }
 .scene { position: relative; padding-block: var(--scene-pad); }
 
 /* 01 · Territorio */
-.scene--hero {
-  min-height: 100vh;
-  min-height: 100svh;
-  padding: 0;
+/* La sección mide una pantalla. Con video (clase .hero--scrub, la añade
+   main.js) mide 280vh y el contenido queda fijo mientras el scroll
+   hace avanzar el video. */
+.scene--hero { padding: 0; }
+.scene--hero.hero--scrub { height: 280vh; }
+.hero__sticky {
+  position: sticky; top: 0;
+  height: 100vh;
+  height: 100svh;
   display: grid;
   align-items: start;
   overflow: hidden;
   isolation: isolate;
 }
 .hero__media,
-.hero__media img {
+.hero__media img,
+.hero__video {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
   object-position: 50% 70%;
   z-index: -2;
 }
-.scene--hero::before {             /* veladura de legibilidad */
+.hero__video { display: none; opacity: 0; transition: opacity .8s var(--ease); }
+.hero--scrub .hero__video { display: block; }
+.hero--scrub .hero__video.is-ready { opacity: 1; }
+
+/* Al avanzar el video, el título sube y se desvanece y aparece la llegada.
+   --hp = progreso del hero (0 → 1), lo escribe main.js. */
+.hero--scrub .hero__content {
+  opacity: calc(1 - var(--hp, 0) * 2.6);
+  transform: translate3d(0, calc(var(--hp, 0) * -80px), 0);
+}
+.hero--scrub .scroll-cue { opacity: calc(1 - var(--hp, 0) * 6); }
+.hero__arrival {
+  position: absolute; left: var(--gutter); bottom: var(--s-6);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--arena);
+  opacity: 0;
+}
+.hero--scrub .hero__arrival { opacity: calc((var(--hp, 0) - 0.75) * 5); }
+
+.hero__sticky::before {             /* veladura de legibilidad */
   content: ""; position: absolute; inset: 0; z-index: -1;
   background:
     linear-gradient(to bottom,
@@ -529,7 +556,93 @@ a { color: inherit; }
 .site-footer__copy { margin-top: var(--s-8); font-size: var(--fs-label); }
 @media (min-width: 768px) { .site-footer__grid { grid-template-columns: 1.4fr repeat(3, 1fr); } }
 
-/* ---------- 8. Movimiento reducido ---------- */
+/* ---------- 8. Animaciones ----------
+   Todo estado inicial oculto depende de la clase .motion, que main.js
+   añade solo si hay JavaScript y el usuario NO pidió movimiento reducido.
+   Sin .motion, el sitio se muestra completo y estático.               */
+
+/* Revelación genérica: sube y aparece. --d = retraso en ms */
+.motion [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  transition:
+    opacity .9s var(--ease) calc(var(--d, 0) * 1ms),
+    transform .9s var(--ease) calc(var(--d, 0) * 1ms);
+}
+.motion [data-reveal].is-in { opacity: 1; transform: none; }
+
+/* 01 · El horizonte se dibuja al cargar */
+.motion .line--horizon {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 2.4s var(--ease) .5s;
+}
+.motion.is-loaded .line--horizon { transform: none; }
+
+/* 01 sin video (móvil, tablet): la imagen respira con un acercamiento lento */
+@keyframes respirar {
+  from { transform: scale(1.14); }
+  to   { transform: scale(1); }
+}
+.motion .scene--hero:not(.hero--scrub) .hero__media img {
+  animation: respirar 16s var(--ease) both;
+}
+/* 05 · la montaña también se acerca despacio mientras se revela */
+.motion .proposito__media img {
+  transform: scale(calc(1.12 - var(--p, 0) * 0.12));
+}
+
+/* 02 · Parallax suave dentro de cada figura (máx. 40 px) */
+.triptych figure { overflow: hidden; }
+.motion .triptych img {
+  transform: translate3d(0, var(--py, 0px), 0) scale(1.08);
+  will-change: transform;
+}
+
+/* 04 · Las líneas se dibujan con el scroll; los nodos se encienden */
+.motion .variables__lines line {
+  vector-effect: none;            /* main.js pasa el SVG a píxeles reales */
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.motion .variables__node,
+.motion .variables__center {
+  opacity: .25;
+  transition: opacity .6s var(--ease), border-color .6s var(--ease);
+}
+.motion .variables__node.is-lit,
+.motion .variables__center.is-lit { opacity: 1; }
+/* Móvil: una línea clara recorre la lista de arriba abajo */
+@media (max-width: 767px) {
+  .variables__list { position: relative; }   /* solo en móvil: en escritorio la lista es absoluta */
+}
+.motion .variables__list::after {
+  content: "";
+  position: absolute; left: -1px; top: 0; bottom: 0;
+  width: 1px;
+  background: var(--arena);
+  transform-origin: top;
+  transform: scaleY(var(--p, 0));
+}
+@media (min-width: 768px) {
+  .motion .variables__list::after { display: none; }
+}
+
+/* 05 · La imagen se abre desde la línea central */
+.motion .proposito__media {
+  clip-path: inset(calc((1 - var(--p, 0)) * 50%) 0);
+}
+
+/* 06 · El logotipo se revela de izquierda a derecha, siguiendo la línea */
+.motion [data-reveal="clip"] {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.8s var(--ease) .2s;
+}
+.motion [data-reveal="clip"].is-in { clip-path: inset(0 0 0 0); }
+
+/* ---------- 9. Movimiento reducido ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {

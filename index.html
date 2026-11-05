@@ -64,53 +64,65 @@
   <main id="contenido">
 
     <!-- ESCENA 01 · EL TERRITORIO -->
-    <section class="scene scene--hero" id="territorio" data-scene aria-labelledby="t-territorio">
-      <picture class="hero__media">
-        <source media="(min-width: 768px)"
-                srcset="./assets/images/territorio-hero-960.webp 960w, ./assets/images/territorio-hero-1672.webp 1672w"
-                sizes="100vw">
-        <img src="./assets/images/territorio-movil-864.webp"
-             srcset="./assets/images/territorio-movil-540.webp 540w, ./assets/images/territorio-movil-864.webp 864w"
-             sizes="100vw" width="864" height="1536" fetchpriority="high"
-             alt="Vista aérea al amanecer de la sabana de los Llanos Orientales, con un hato de ganado Brahman avanzando entre la niebla y los morichales.">
-      </picture>
+    <section class="scene scene--hero" id="territorio" data-scene data-hero aria-labelledby="t-territorio">
+      <div class="hero__sticky">
+        <picture class="hero__media">
+          <source media="(min-width: 768px)"
+                  srcset="./assets/images/territorio-hero-960.webp 960w, ./assets/images/territorio-hero-1672.webp 1672w"
+                  sizes="100vw">
+          <img src="./assets/images/territorio-movil-864.webp"
+               srcset="./assets/images/territorio-movil-540.webp 540w, ./assets/images/territorio-movil-864.webp 864w"
+               sizes="100vw" width="864" height="1536" fetchpriority="high"
+               alt="Vista aérea al amanecer de la sabana de los Llanos Orientales, con un hato de ganado Brahman avanzando entre la niebla y los morichales.">
+        </picture>
 
-      <div class="hero__content">
-        <p class="eyebrow">Llanos Orientales · Santander</p>
-        <h1 class="hero__title" id="t-territorio">El futuro de la ganadería comienza en el campo.</h1>
-        <p class="hero__lead">Tradición que evoluciona. Inteligencia que produce.</p>
+        <!-- Video controlado por el scroll: main.js le asigna el archivo solo en escritorio
+             y sin movimiento reducido. En móvil nunca se descarga. -->
+        <video class="hero__video" data-hero-video
+               data-src="./assets/videos/territorio-scrub.mp4"
+               poster="./assets/images/territorio-poster-1280.webp"
+               muted playsinline preload="none" disablepictureinpicture
+               aria-hidden="true" tabindex="-1"></video>
+
+        <div class="hero__content">
+          <p class="eyebrow" data-reveal>Llanos Orientales · Santander</p>
+          <h1 class="hero__title" id="t-territorio" data-reveal style="--d:120">El futuro de la ganadería comienza en el campo.</h1>
+          <p class="hero__lead" data-reveal style="--d:320">Tradición que evoluciona. Inteligencia que produce.</p>
+        </div>
+
+        <p class="hero__arrival" aria-hidden="true">Llanos Orientales, Colombia</p>
+
+        <svg class="line line--horizon" data-horizon viewBox="0 0 100 1" preserveAspectRatio="none" aria-hidden="true">
+          <line x1="0" y1="0.5" x2="100" y2="0.5" />
+        </svg>
+
+        <a class="scroll-cue" href="#esencia">Descubre</a>
       </div>
-
-      <svg class="line line--horizon" viewBox="0 0 100 1" preserveAspectRatio="none" aria-hidden="true">
-        <line x1="0" y1="0.5" x2="100" y2="0.5" />
-      </svg>
-
-      <a class="scroll-cue" href="#esencia">Descubre</a>
     </section>
 
     <!-- ESCENA 02 · NUESTRA ESENCIA -->
     <section class="scene scene--esencia" id="esencia" data-scene aria-labelledby="t-esencia">
       <div class="container">
-        <header class="scene__header">
+        <header class="scene__header" data-reveal>
           <p class="eyebrow">02 · Nuestra esencia</p>
           <h2 class="scene__title" id="t-esencia">Conocimiento que se construye generación tras generación.</h2>
           <p class="scene__text">Detrás de cada animal hay oficio: saber leer el pasto, el clima y el comportamiento del hato. Ese conocimiento, aprendido en el trabajo de cada día, es la base de todo lo que hacemos.</p>
         </header>
 
         <div class="triptych">
-          <figure class="triptych__main">
+          <figure class="triptych__main" data-reveal data-parallax="1">
             <img src="./assets/images/esencia-toro-700.webp"
                  srcset="./assets/images/esencia-toro-700.webp 700w, ./assets/images/esencia-toro-1122.webp 1122w"
                  sizes="(min-width: 1024px) 50vw, 100vw" width="1122" height="1402" loading="lazy"
                  alt="Toro Brahman rojo de perfil, con la giba y las orejas iluminadas a contraluz al atardecer.">
           </figure>
-          <figure class="triptych__side">
+          <figure class="triptych__side" data-reveal data-parallax="0.6" style="--d:150">
             <img src="./assets/images/esencia-oficio-700.webp"
                  srcset="./assets/images/esencia-oficio-700.webp 700w, ./assets/images/esencia-oficio-1254.webp 1254w"
                  sizes="(min-width: 1024px) 35vw, 50vw" width="1254" height="1254" loading="lazy"
                  alt="Manos curtidas de un vaquero llanero ajustando una soga de cuero trenzado.">
           </figure>
-          <figure class="triptych__side">
+          <figure class="triptych__side" data-reveal data-parallax="0.6" style="--d:300">
             <img src="./assets/images/esencia-hato-960.webp"
                  srcset="./assets/images/esencia-hato-960.webp 960w, ./assets/images/esencia-hato-1536.webp 1536w"
                  sizes="(min-width: 1024px) 35vw, 50vw" width="1536" height="1024" loading="lazy"
@@ -129,23 +141,23 @@
              alt="Potreros en ladera en las montañas de Santander, divididos por cercas de madera que siguen el relieve.">
       </figure>
       <div class="container">
-        <header class="scene__header">
+        <header class="scene__header" data-reveal>
           <p class="eyebrow">03 · Nuestra visión</p>
           <h2 class="scene__title" id="t-vision">Producir mejor también significa decidir mejor.</h2>
           <p class="scene__text">La ganadería de hoy exige algo más que experiencia: exige planificar, medir y mejorar cada decisión.</p>
         </header>
         <ol class="principles">
-          <li>
+          <li data-reveal>
             <span class="principles__num">01</span>
             <h3>Planificar</h3>
             <p>Anticipar cada ciclo productivo con criterio.</p>
           </li>
-          <li>
+          <li data-reveal style="--d:150">
             <span class="principles__num">02</span>
             <h3>Medir</h3>
             <p>Conocer lo que pasa en el campo para entenderlo.</p>
           </li>
-          <li>
+          <li data-reveal style="--d:300">
             <span class="principles__num">03</span>
             <h3>Mejorar</h3>
             <p>Ajustar con información, no solo con intuición.</p>
@@ -157,18 +169,18 @@
     <!-- ESCENA 04 · INTELIGENCIA GANADERA -->
     <section class="scene scene--inteligencia" id="inteligencia" data-scene aria-labelledby="t-inteligencia">
       <div class="container">
-        <header class="scene__header scene__header--center">
+        <header class="scene__header scene__header--center" data-reveal>
           <p class="eyebrow">04 · Inteligencia ganadera</p>
           <h2 class="scene__title" id="t-inteligencia">La inteligencia del campo está en comprender cada variable.</h2>
         </header>
 
-        <div class="variables">
+        <div class="variables" data-variables>
           <svg class="variables__lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-            <line x1="50" y1="16.7" x2="50" y2="50" />
-            <line x1="16.7" y1="50" x2="50" y2="50" />
-            <line x1="83.3" y1="50" x2="50" y2="50" />
-            <line x1="16.7" y1="83.3" x2="50" y2="50" />
-            <line x1="83.3" y1="83.3" x2="50" y2="50" />
+            <line pathLength="1" x1="50" y1="16.7" x2="50" y2="50" />
+            <line pathLength="1" x1="16.7" y1="50" x2="50" y2="50" />
+            <line pathLength="1" x1="83.3" y1="50" x2="50" y2="50" />
+            <line pathLength="1" x1="16.7" y1="83.3" x2="50" y2="50" />
+            <line pathLength="1" x1="83.3" y1="83.3" x2="50" y2="50" />
           </svg>
           <ul class="variables__list">
             <li class="variables__node variables__node--territorio">Territorio</li>
@@ -180,7 +192,7 @@
           <p class="variables__center">Mejores decisiones</p>
         </div>
 
-        <p class="scene__note">Estamos construyendo las herramientas para lograrlo.</p>
+        <p class="scene__note" data-reveal>Estamos construyendo las herramientas para lograrlo.</p>
       </div>
     </section>
 
@@ -195,7 +207,7 @@
              sizes="100vw" width="864" height="1536" loading="lazy"
              alt="Montañas de Santander al atardecer, con potreros en ladera y un camino rural que sube hacia la luz.">
       </picture>
-      <div class="proposito__content">
+      <div class="proposito__content" data-reveal>
         <p class="eyebrow">05 · Nuestro propósito</p>
         <h2 class="scene__title" id="t-proposito">Una nueva perspectiva para el desarrollo ganadero.</h2>
         <p class="scene__text">Del llano a la montaña, creemos en una ganadería que crece con su territorio: más eficiente, mejor informada y comprometida con las regiones donde trabaja.</p>
@@ -205,9 +217,9 @@
     <!-- ESCENA 06 · IDENTIDAD GANAGÁN -->
     <section class="scene scene--identidad" id="identidad" data-scene aria-labelledby="t-identidad">
       <div class="container identidad">
-        <img class="identidad__logo" src="./assets/icons/ganagan-logo-marfil.svg" width="1085" height="1449" loading="lazy"
+        <img class="identidad__logo" data-reveal="clip" src="./assets/icons/ganagan-logo-marfil.svg" width="1085" height="1449" loading="lazy"
              alt="Logotipo de Inversiones Ganagán">
-        <h2 class="identidad__claim" id="t-identidad">GANAGÁN. <span>Tradición que evoluciona.</span></h2>
+        <h2 class="identidad__claim" id="t-identidad" data-reveal style="--d:900">GANAGÁN. <span>Tradición que evoluciona.</span></h2>
       </div>
     </section>
 
