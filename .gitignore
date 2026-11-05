@@ -1,0 +1,25 @@
+# Variables de entorno y credenciales
+.env
+.env.*
+!.env.example
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Dependencias de Node.js
+node_modules/
+
+# Archivos de compilación
+dist/
+build/
+
+# Material temporal de revisión
+review/frames/*
+review/exports/*
+
+# Archivos temporales y respaldos
+*.bak
+*.tmp
+*.log
