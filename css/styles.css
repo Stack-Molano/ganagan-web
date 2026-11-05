@@ -257,7 +257,7 @@ a { color: inherit; }
 .scene-index a:hover,
 .scene-index a[aria-current="true"] { color: var(--arena); border-left-color: var(--arena); }
 /* Sobre la escena clara (03) el indicador cambia a tonos oscuros */
-.scene-index.on-light a { color: color-mix(in srgb, var(--tinta) 60%, transparent); border-left-color: color-mix(in srgb, var(--tierra) 50%, transparent); }
+.scene-index.on-light a { color: color-mix(in srgb, var(--tinta) 75%, var(--marfil));   /* ≈ 6:1 */ border-left-color: color-mix(in srgb, var(--tierra) 50%, transparent); }
 .scene-index.on-light a:hover,
 .scene-index.on-light a[aria-current="true"] { color: var(--tierra); border-left-color: var(--tierra); }
 @media (min-width: 1024px) { .scene-index { display: block; } }
@@ -310,14 +310,29 @@ a { color: inherit; }
 }
 .hero--scrub .hero__arrival { opacity: calc((var(--hp, 0) - 0.75) * 5); }
 
-.hero__sticky::before {             /* veladura de legibilidad */
+/* Veladura de legibilidad. Valores medidos contra la imagen real:
+   título ≥ 3:1 y subtítulo ≥ 4,5:1 en el percentil 95 del fondo. */
+.hero__sticky::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
   background:
     linear-gradient(to bottom,
+      color-mix(in srgb, var(--grafito) 70%, transparent) 0%,
+      color-mix(in srgb, var(--grafito) 60%, transparent) 48%,
+      transparent 68%,
+      color-mix(in srgb, var(--grafito) 70%, transparent) 100%);
+}
+@media (min-width: 768px) {
+  .hero__sticky::before {
+    background:
+      linear-gradient(to right,
+        color-mix(in srgb, var(--grafito) 45%, transparent) 0%,
+        transparent 75%),
+      linear-gradient(to bottom,
       color-mix(in srgb, var(--grafito) 62%, transparent) 0%,
       color-mix(in srgb, var(--grafito) 30%, transparent) 38%,
       transparent 58%,
       color-mix(in srgb, var(--grafito) 70%, transparent) 100%);
+  }
 }
 .hero__content {
   padding: calc(var(--header-h) + clamp(var(--s-6), 10vh, var(--s-16))) var(--gutter) 0;
