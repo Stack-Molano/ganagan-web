@@ -58,6 +58,16 @@ Logotipo aportado por la empresa, vectorizado con ChatGPT a partir del GIF origi
 - **Correcciones respecto al vectorizado:** se eliminó una línea fina sobre la razón social que no existe en el original, y se recuperaron los huecos de las letras «O» (12 contraformas que habían quedado rellenas).
 - La cabeza es transparente por dentro: sobre fotografía, usar siempre un fondo sólido detrás.
 
+## Fuentes
+
+Descargadas de Google Fonts (`fonts.gstatic.com`) el 2026-11-05. Solo el subconjunto latino (incluye á, é, í, ó, ú, ñ, ü, ¿, ¡). Licencia SIL Open Font License (OFL): uso comercial y web permitido.
+
+| Archivo | Familia | Pesos | Peso del archivo | Uso |
+|---|---|---|---|---|
+| `assets/fonts/fraunces-variable.woff2` | Fraunces (variable, con tamaño óptico) | 300–700 | 66 KB | Títulos |
+| `assets/fonts/manrope-variable.woff2` | Manrope (variable) | 400–700 | 24 KB | Texto y menú |
+| `assets/fonts/ibm-plex-mono-400.woff2` | IBM Plex Mono | 400 | 14 KB | Etiquetas de datos e indicador de escenas |
+
 ## Prompts
 
 Los prompts de cada recurso están en la sección 11 de `docs/paquete-de-diseno.md`.
