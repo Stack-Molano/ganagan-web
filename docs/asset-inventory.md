@@ -60,4 +60,4 @@ Logotipo aportado por la empresa, vectorizado con ChatGPT a partir del GIF origi
 
 ## Prompts
 
-Los prompts de cada recurso están en el historial de trabajo de la Fase 2 y se incorporarán a `docs/paquete-de-diseno.md` cuando se apruebe ese documento.
+Los prompts de cada recurso están en la sección 11 de `docs/paquete-de-diseno.md`.

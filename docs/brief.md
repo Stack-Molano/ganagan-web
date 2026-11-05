@@ -1,52 +1,57 @@
 # Brief de estrategia: sitio público de Ganagán
 
-Fase 1 de la Skill `sitios-web-ganagan`. Aprobado el 2026-11-05.
+Fase 1 de la Skill `sitios-web-ganagan`. Versión 2, aprobada el 2026-11-05.
+Sustituye a la versión 1, que describía a Ganagán como plataforma para pequeños productores.
+
+## Quién es Ganagán
+
+**Inversiones Ganagán M&V S.A.S. ZOMAC**, una empresa ganadera colombiana que trabaja con ganado Brahman, cebú y sus cruces en los **Llanos Orientales** y **Santander**.
 
 ## Objetivo
 
-Presentar la marca. En esta etapa el sitio da a conocer Ganagán y su visión. No vende ni capta registros.
+Construir una presencia digital **institucional y de marca**. En esta etapa el sitio no vende, no capta clientes con formularios y no es una plataforma transaccional. Debe:
+
+1. Posicionar a Ganagán como una empresa ganadera moderna y con visión empresarial.
+2. Construir reconocimiento y recordación de marca.
+3. Comunicar experiencia, conocimiento, tradición y capacidad productiva.
+4. Diferenciarse de la imagen tradicional del sector.
+5. Asociar la marca con innovación, inteligencia productiva, eficiencia y evolución tecnológica.
+6. Dejar preparada una identidad que pueda incorporar más adelante la plataforma de inteligencia productiva y financiera ganadera.
 
 ## Público
 
-Productores y aliados por igual:
+Productores, aliados, gremios, instituciones y personas del sector que deben percibir una empresa ganadera seria, auténtica y con visión de futuro.
 
-- **Pequeños y medianos ganaderos colombianos:** deben reconocerse en la historia y sentir que esto es para ellos.
-- **Aliados** (gremios, cooperativas, bancos, entidades de desarrollo rural): deben ver un proyecto serio y bien pensado.
+## Concepto central
 
-## Propuesta de valor
+**GANAGÁN. Tradición que evoluciona. Inteligencia que produce.**
 
-Llevar herramientas de gestión de nivel profesional al pequeño y mediano productor.
+La ganadería conserva su esencia y, al mismo tiempo, evoluciona mediante información, conocimiento, tecnología y mejores decisiones. Cinco dimensiones: tradición ganadera, conocimiento productivo, gestión empresarial, innovación tecnológica y visión de futuro.
 
 ## Tono
 
-Cinematográfico y épico. Paisaje ganadero colombiano con escala, luz y peso emocional. Textos breves, dignos y sin tecnicismos.
+Minimalista, editorial, cinematográfico, elegante, contemporáneo, natural y sofisticado sin resultar artificial.
 
-## Narrativa
+## Lo que el sitio no debe parecer
 
-Del pequeño al profesional. Boceto de momentos, de arriba hacia abajo:
+Una tienda de insumos agropecuarios, un catálogo convencional de ganado, una página institucional genérica ni una startup tecnológica sin campo.
 
-1. **Apertura:** el territorio, con la escala del campo colombiano al amanecer.
-2. **El productor hoy:** trabajo duro y decisiones tomadas a ojo, con libreta y memoria.
-3. **El giro:** aparece Ganagán, con la producción, el territorio y las finanzas en un solo lugar.
-4. **El productor profesional:** el mismo productor, ahora con claridad sobre su hato.
-5. **Cierre:** el campo colombiano profesionalizado, más la llamada a la acción.
+## Cierre del recorrido
 
-## Territorio
-
-Colombia. El paisaje, las razas y el vocabulario serán colombianos.
-
-## Llamada a la acción
-
-Seguir a Ganagán en redes sociales. No requiere backend ni formularios, así que encaja con GitHub Pages.
+Identidad de marca (logotipo y frase institucional) y navegación hacia información complementaria en el pie de página. No hay formularios.
 
 ## Restricciones
 
-- Sitio estático: HTML, CSS y JavaScript publicados en GitHub Pages.
-- La plataforma futura (usuarios, datos, API) no se construye en este repositorio.
-- No se inventan cifras, testimonios, clientes ni funciones que la plataforma todavía no tenga.
+- Sitio estático: HTML, CSS y JavaScript nativos, publicado en GitHub Pages.
+- Sin backend, base de datos, formularios que simulen procesar datos ni plataforma ganadera en esta etapa.
+- Sin dependencias, frameworks ni servicios comerciales sin justificación.
+- **No se publican cifras, años, extensiones, número de animales ni testimonios** que la empresa no haya confirmado. Hoy no hay datos confirmados.
+- **Todas las imágenes y el video son generados con IA.** No se presentan como instalaciones, personas ni animales propios de la empresa.
 - Todo efecto visual tiene alternativa estática y respeta `prefers-reduced-motion`.
+- Diseño pensado desde el inicio para escritorio, portátil, tablet y móvil.
 
 ## Pendientes
 
-- **Redes sociales:** confirmar si existen las cuentas de Ganagán y obtener sus URL. Mientras tanto, los enlaces quedan marcados como pendientes.
-- **Visibilidad del repositorio:** confirmar si es público o privado antes de la publicación en GitHub Pages.
+- **Datos verificables** de la empresa (trayectoria, extensión, genética), si se quieren publicar.
+- **Contacto y redes** para el pie de página.
+- **Visibilidad del repositorio** (público o privado) antes de publicar en GitHub Pages.
