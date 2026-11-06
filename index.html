@@ -102,38 +102,69 @@
     <!-- ESCENA 02 · NUESTRA ESENCIA -->
     <section class="scene scene--esencia" id="esencia" data-scene aria-labelledby="t-esencia">
       <div class="container">
-        <header class="scene__header" data-reveal>
-          <p class="eyebrow">02 · Nuestra esencia</p>
-          <h2 class="scene__title" id="t-esencia">Conocimiento que se construye generación tras generación.</h2>
-          <p class="scene__text">Detrás de cada animal hay oficio: leer el pasto, el clima y el comportamiento del hato. Es un saber que se aprende en el trabajo diario y sobre el que construimos todo lo demás.</p>
+        <header class="scene__header esencia__header">
+          <p class="eyebrow" data-reveal>02 · Nuestra esencia</p>
+          <h2 class="scene__title" id="t-esencia" data-reveal style="--d:100">Conocimiento que se construye generación tras generación.</h2>
+          <p class="scene__text" data-reveal style="--d:200">Detrás de cada animal hay oficio: leer el pasto, el clima y el comportamiento del hato. Es un saber que se aprende en el trabajo diario y sobre el que construimos todo lo demás.</p>
         </header>
 
-        <div class="triptych">
-          <figure class="triptych__main" data-reveal data-parallax="1">
-            <img src="./assets/images/esencia-toro-700.webp"
-                 srcset="./assets/images/esencia-toro-700.webp 700w, ./assets/images/esencia-toro-1122.webp 1122w"
-                 sizes="(min-width: 1024px) 50vw, 100vw" width="1122" height="1402" loading="lazy"
-                 alt="Toro Brahman rojo de perfil, con la giba y las orejas iluminadas a contraluz al atardecer.">
-          </figure>
-          <figure class="triptych__side" data-reveal data-parallax="0.6" style="--d:150">
-            <img src="./assets/images/esencia-oficio-700.webp"
-                 srcset="./assets/images/esencia-oficio-700.webp 700w, ./assets/images/esencia-oficio-1254.webp 1254w"
-                 sizes="(min-width: 1024px) 35vw, 50vw" width="1254" height="1254" loading="lazy"
-                 alt="Manos curtidas de un vaquero llanero ajustando una soga de cuero trenzado.">
-          </figure>
-          <figure class="triptych__side" data-reveal data-parallax="0.6" style="--d:300">
-            <img src="./assets/images/esencia-hato-960.webp"
-                 srcset="./assets/images/esencia-hato-960.webp 960w, ./assets/images/esencia-hato-1536.webp 1536w"
-                 sizes="(min-width: 1024px) 35vw, 50vw" width="1536" height="1024" loading="lazy"
-                 alt="Jinete llanero de espaldas guiando un hato de ganado cebú al atardecer.">
-          </figure>
-        </div>
+        <ul class="cards" role="list">
+          <li class="card" data-reveal>
+            <figure class="card__media">
+              <img src="./assets/images/esencia-toro-700.webp"
+                   srcset="./assets/images/esencia-toro-700.webp 700w, ./assets/images/esencia-toro-1122.webp 1122w"
+                   sizes="(min-width: 1024px) 26rem, 82vw" width="1122" height="1402" loading="lazy"
+                   alt="Toro Brahman rojo de perfil, con la giba y las orejas iluminadas a contraluz al atardecer.">
+            </figure>
+            <div class="card__body">
+              <p class="card__meta"><span>01</span> Bos indicus</p>
+              <h3 class="card__title">Razas</h3>
+              <p class="card__text">Brahman, cebú y sus cruces: ganado de origen índico, hecho para el calor, la humedad y las pasturas tropicales. Rústico y de temperamento manejable.</p>
+              <ul class="card__tags" role="list" aria-label="Razas">
+                <li>Brahman</li><li>Cebú</li><li>Cruces</li>
+              </ul>
+            </div>
+          </li>
+          <li class="card" data-reveal style="--d:150">
+            <figure class="card__media">
+              <img src="./assets/images/esencia-oficio-700.webp"
+                   srcset="./assets/images/esencia-oficio-700.webp 700w, ./assets/images/esencia-oficio-1254.webp 1254w"
+                   sizes="(min-width: 1024px) 26rem, 82vw" width="1254" height="1254" loading="lazy"
+                   alt="Manos curtidas de un vaquero llanero ajustando una soga de cuero trenzado.">
+            </figure>
+            <div class="card__body">
+              <p class="card__meta"><span>02</span> Llanos · Santander</p>
+              <h3 class="card__title">Ventajas comparativas</h3>
+              <p class="card__text">Genética adaptada al trópico, presencia en dos regiones con climas y mercados distintos, y animales a campo abierto con un manejo de bajo estrés.</p>
+              <ul class="card__tags" role="list" aria-label="Ventajas">
+                <li>Genética</li><li>Dos regiones</li><li>Bienestar</li>
+              </ul>
+            </div>
+          </li>
+          <li class="card" data-reveal style="--d:300">
+            <figure class="card__media">
+              <img src="./assets/images/esencia-hato-960.webp"
+                   srcset="./assets/images/esencia-hato-960.webp 960w, ./assets/images/esencia-hato-1536.webp 1536w"
+                   sizes="(min-width: 1024px) 26rem, 82vw" width="1536" height="1024" loading="lazy"
+                   alt="Jinete llanero de espaldas guiando un hato de ganado cebú por la sabana al atardecer.">
+            </figure>
+            <div class="card__body">
+              <p class="card__meta"><span>03</span> Sabana y ladera</p>
+              <h3 class="card__title">Suelos</h3>
+              <p class="card__text">De las sabanas de los Llanos a las laderas de Santander: conocer cada suelo define qué pasto sembrar, cuántos animales sostiene y cuándo rotar.</p>
+              <ul class="card__tags" role="list" aria-label="Regiones">
+                <li>Llanos Orientales</li><li>Santander</li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+        <p class="cards__hint" aria-hidden="true">Desliza →</p>
       </div>
     </section>
 
     <!-- ESCENA 03 · NUESTRA VISIÓN -->
     <section class="scene scene--vision" id="vision" data-scene aria-labelledby="t-vision">
-      <figure class="vision__media">
+      <figure class="vision__media" data-vision-media>
         <img src="./assets/images/vision-ladera-960.webp"
              srcset="./assets/images/vision-ladera-960.webp 960w, ./assets/images/vision-ladera-1560.webp 1560w"
              sizes="100vw" width="1560" height="822" loading="lazy"

@@ -378,26 +378,135 @@ a { color: inherit; }
   background: linear-gradient(var(--arena), transparent);
 }
 
-/* 02 · Esencia */
-.triptych {
-  display: grid;
-  gap: var(--s-2);
-  grid-template-columns: 1fr 1fr;
-}
-.triptych img { width: 100%; height: 100%; object-fit: cover; }
-.triptych__main { grid-column: 1 / -1; aspect-ratio: 4 / 5; }
-.triptych__side { aspect-ratio: 1; }
-@media (min-width: 768px) {
-  .triptych__main { aspect-ratio: 16 / 11; }
+/* 02 · Esencia: encabezado editorial y tres tarjetas técnicas
+   (razas, ventajas, suelos). Escritorio: rejilla de 3 columnas.
+   Móvil y tableta: carrusel horizontal que se desliza con el dedo. */
+.scene--esencia {
+  background:
+    radial-gradient(60rem 30rem at 85% 0%, color-mix(in srgb, var(--bosque) 55%, transparent), transparent 70%),
+    var(--grafito);
 }
 @media (min-width: 1024px) {
-  .triptych {
-    grid-template-columns: 7fr 5fr;
-    grid-template-rows: 1fr 1fr;
-    gap: var(--s-3);
+  .esencia__header {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: var(--s-8);
+    align-items: end;
   }
-  .triptych__main { grid-column: 1; grid-row: 1 / span 2; aspect-ratio: 4 / 5; }
-  .triptych__side { aspect-ratio: auto; }
+  .esencia__header .eyebrow { grid-column: 1 / -1; margin-bottom: var(--s-2); }
+  .esencia__header .scene__text { margin-top: 0; font-size: var(--fs-body); }
+}
+
+.cards {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 82%;
+  gap: var(--s-2);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  margin-inline: calc(-1 * var(--gutter));
+  padding: var(--s-1) var(--gutter) var(--s-3);
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+}
+.cards::-webkit-scrollbar { display: none; }
+@media (min-width: 768px) { .cards { grid-auto-columns: 46%; gap: var(--s-3); } }
+@media (min-width: 1024px) {
+  .cards {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, 1fr);
+    overflow: visible;
+    margin-inline: 0; padding: 0;
+  }
+}
+.cards__hint {
+  margin-top: var(--s-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--piedra);
+}
+@media (min-width: 1024px) { .cards__hint { display: none; } }
+
+.card {
+  --card-bg: color-mix(in srgb, var(--marfil) 4%, var(--grafito));
+  position: relative;
+  display: flex; flex-direction: column;
+  scroll-snap-align: start;
+  background: var(--card-bg);
+  border: 1px solid color-mix(in srgb, var(--marfil) 9%, transparent);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color .5s var(--ease), translate .5s var(--ease), box-shadow .5s var(--ease);
+}
+/* Línea arena que se dibuja en el borde superior al pasar el mouse */
+.card::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 2px; z-index: 2;
+  background: var(--arena);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .7s var(--ease);
+}
+.card__media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
+.card__media img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 1.2s var(--ease), filter .8s var(--ease);
+  filter: saturate(.92);
+}
+.card:nth-child(1) .card__media img { object-position: 60% 30%; }
+.card:nth-child(3) .card__media img { object-position: 50% 65%; }
+/* La foto se disuelve en el fondo de la tarjeta: sin corte duro */
+.card__media::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 55%, var(--card-bg) 100%);
+}
+.card__body {
+  display: flex; flex-direction: column; flex: 1;
+  padding: var(--s-2) var(--s-3) var(--s-3);
+}
+.card__meta {
+  display: flex; align-items: center; gap: var(--s-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--arena);
+}
+.card__meta span {
+  padding-right: var(--s-1);
+  border-right: 1px solid color-mix(in srgb, var(--arena) 40%, transparent);
+  color: var(--piedra);
+}
+.card__title {
+  margin-top: var(--s-1);
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  line-height: 1.2;
+}
+.card__text {
+  margin-top: var(--s-1);
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--marfil) 78%, transparent);
+}
+.card__tags {
+  display: flex; flex-wrap: wrap; gap: 0.375rem;
+  margin-top: auto; padding-top: var(--s-3);
+}
+.card__tags li {
+  padding: 0.25rem 0.625rem;
+  border: 1px solid color-mix(in srgb, var(--marfil) 14%, transparent);
+  border-radius: 999px;
+  font-size: var(--fs-label);
+  color: color-mix(in srgb, var(--marfil) 75%, transparent);
+}
+@media (hover: hover) {
+  .card:hover {
+    border-color: color-mix(in srgb, var(--arena) 45%, transparent);
+    translate: 0 -6px;
+    box-shadow: 0 24px 48px -24px rgb(0 0 0 / .6);
+  }
+  .card:hover::before { transform: scaleX(1); }
+  .card:hover .card__media img { transform: scale(1.06); filter: saturate(1); }
 }
 
 /* 03 · Visión (escena clara) */
@@ -408,13 +517,29 @@ a { color: inherit; }
 }
 .scene--vision .eyebrow { color: var(--tierra); }
 .scene--vision .scene__text { color: color-mix(in srgb, var(--tinta) 85%, transparent); }
+/* La ladera sale del grafito de la escena 02 y se disuelve en el marfil;
+   el texto sube sobre la parte ya disuelta. */
 .vision__media {
-  margin-bottom: var(--scene-pad);
-  aspect-ratio: 4 / 3;
+  position: relative;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
+  margin-bottom: calc(-1 * clamp(2rem, 12vh, 8rem));
 }
 .vision__media img { width: 100%; height: 100%; object-fit: cover; object-position: 30% 50%; }
-@media (min-width: 768px) { .vision__media { aspect-ratio: 21 / 9; } }
+.vision__media::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to bottom,
+    var(--grafito) 0%,
+    color-mix(in srgb, var(--grafito) 55%, transparent) 9%,
+    transparent 24%,
+    transparent 52%,
+    color-mix(in srgb, var(--marfil) 60%, transparent) 70%,
+    var(--marfil) 88%);
+}
+@media (min-width: 768px) {
+  .vision__media { aspect-ratio: auto; height: clamp(28rem, 100svh, 62vw); }
+}
+.scene--vision .container { position: relative; z-index: 1; }
 
 .principles {
   display: grid; gap: var(--s-6);
@@ -607,10 +732,9 @@ a { color: inherit; }
   transform: scale(calc(1.12 - var(--p, 0) * 0.12));
 }
 
-/* 02 · Parallax suave dentro de cada figura (máx. 40 px) */
-.triptych figure { overflow: hidden; }
-.motion .triptych img {
-  transform: translate3d(0, var(--py, 0px), 0) scale(1.08);
+/* 03 · La ladera se acerca despacio mientras entra */
+.motion .vision__media img {
+  transform: scale(calc(1.16 - var(--p, 0) * 0.16));
   will-change: transform;
 }
 

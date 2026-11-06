@@ -130,18 +130,11 @@
     reveals.forEach((el) => revealObserver.observe(el));
   };
 
-  /* --- Escena 02: parallax --- */
-  const parallaxFigures = [...document.querySelectorAll('[data-parallax]')];
-  const updateParallax = () => {
-    const vh = window.innerHeight;
-    parallaxFigures.forEach((fig) => {
-      if (!inView(fig)) return;
-      const r = fig.getBoundingClientRect();
-      const offset = (r.top + r.height / 2 - vh / 2) / vh;   // -1 … 1 aprox.
-      const speed = parseFloat(fig.dataset.parallax) || 1;
-      const py = clamp(-offset * 60 * speed, -40, 40);
-      fig.querySelector('img').style.setProperty('--py', `${py.toFixed(1)}px`);
-    });
+  /* --- Escena 03: la ladera se acerca mientras entra --- */
+  const visionMedia = document.querySelector('[data-vision-media]');
+  const updateVision = () => {
+    if (!visionMedia || !inView(visionMedia)) return;
+    visionMedia.style.setProperty('--p', progress(visionMedia, 1, 0).toFixed(3));
   };
 
   /* --- Escena 04: líneas que convergen y nodos que se encienden --- */
@@ -298,7 +291,7 @@
     frame = requestAnimationFrame(() => {
       frame = null;
       updateHero();
-      updateParallax();
+      updateVision();
       updateVariables();
       updateProposito();
     });
