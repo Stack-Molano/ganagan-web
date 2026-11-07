@@ -33,6 +33,9 @@ Actualizado: 2026-11-05.
 | ID | Archivo publicado | Formato | Peso | Origen | Original | Escena | Alternativa |
 |---|---|---|---|---|---|---|---|
 | VID-01 | `assets/videos/territorio-scrub.mp4` | H.264, 1280×720, 24 fps, 10 s, sin audio | 4,6 MB | Gemini, imagen a video desde IMG-01H | `VID-01.mp4` | 01 Territorio | POSTER en escritorio; IMG-01V en móvil y con movimiento reducido |
+| VID-01M | `assets/videos/territorio-scrub-movil.mp4` | H.264, 406×720, 24 fps, 10 s, sin audio | 1,1 MB | Recorte vertical de VID-01 con paneo que sigue al hato (FFmpeg, mismo ajuste de color) | `VID-01.mp4` | 01 Territorio | Teléfonos en vertical (desde 2026-11-07); con ahorro de datos o movimiento reducido, IMG-01V |
+| VID-04 | `assets/videos/resultados-loop.mp4` | H.264, 1280×720, 24 fps, 15,6 s en bucle de ida y vuelta, sin audio | 3,4 MB | Flow, fotogramas a video desde IMG-09; bucle de ida y vuelta (el fundido dejaba un dron doble), mismo ajuste de color | `VID-04.mp4`, `IMG-09-agrotech.png` | 04 Resultados | Columna izquierda; con movimiento reducido, solo el póster |
+| POSTER-04 | `assets/images/resultados-poster-960.webp` | 960×540 | 98 KB | Primer fotograma de VID-04 | — | 04 Resultados | `poster` del video |
 | VID-03 | `assets/videos/vision-scrub.mp4` | H.264, 1280×720, 24 fps, 7,9 s, sin audio, CRF 25 | 4,8 MB | Google Flow (Veo), imagen a video desde IMG-03 | `VID-3.mp4` | 03 Visión | IMG-03 en móvil y con movimiento reducido |
 
 Codificación para scroll: fotograma clave cada 8 fotogramas (30 en total), CRF 20, `faststart`. Se eliminó la pista de audio del original. Solo se carga en escritorio.

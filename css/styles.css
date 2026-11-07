@@ -632,73 +632,196 @@ a { color: inherit; }
   letter-spacing: 0.04em;
 }
 
-/* Móvil: lista vertical recorrida por la línea */
-.variables { position: relative; max-width: 56rem; margin-inline: auto; }
-.variables__lines { display: none; }
-.variables__list {
-  display: grid; gap: var(--s-4);
-  padding-left: var(--s-4);
-  border-left: var(--line);
+/* Dos columnas: tecnología en campo (video) y red de ejes.
+   Móvil y tableta: apiladas, primero el video. */
+.resultados {
+  display: grid; gap: var(--s-6);
+  align-items: center;
 }
-.variables__node,
-.variables__center {
+@media (min-width: 1024px) {
+  .resultados { grid-template-columns: 1fr 1fr; gap: var(--s-8); }
+}
+
+.resultados__media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 6px;
+  isolation: isolate;
+  background: var(--grafito);
+}
+.resultados__video {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: 55% 50%;
+  display: block;
+}
+/* Los bordes se funden con el verde bosque de la escena */
+.resultados__media::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(to top, color-mix(in srgb, var(--bosque) 85%, transparent) 0%, transparent 32%),
+    radial-gradient(120% 90% at 50% 45%, transparent 60%, color-mix(in srgb, var(--bosque) 70%, transparent) 100%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--arena) 22%, transparent);
+  border-radius: inherit;
+}
+.resultados__caption {
+  position: absolute; left: var(--s-3); bottom: var(--s-2); z-index: 1;
   font-family: var(--font-mono);
-  font-size: var(--fs-small);
-  letter-spacing: 0.1em;
+  font-size: var(--fs-label);
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--arena);
+}
+
+/* Escritorio: pantalla dividida. El video ocupa la mitad izquierda de la
+   escena y queda fijo (sticky) mientras el título, el texto y la red se
+   desplazan por la mitad derecha. Se funde hacia la derecha y al final en
+   el verde bosque. --media-h (alto hasta debajo de la red) lo pone main.js. */
+@media (min-width: 1024px) {
+  .scene--inteligencia { padding-top: 0; }
+  .scene--inteligencia .scene__header,
+  .scene--inteligencia .scene__note,
+  .scene--inteligencia .scene-next { position: relative; z-index: 1; }
+  .scene--inteligencia .scene__header {
+    margin-left: 50%;
+    padding-left: var(--s-6);
+    padding-top: calc(var(--header-h) + var(--s-8));
+    text-align: left;
+  }
+  .scene--inteligencia .scene__header .scene__title,
+  .scene--inteligencia .scene__header .scene__text { margin-inline: 0; }
+  .scene--inteligencia .scene__note { margin-left: 50%; padding-left: var(--s-6); text-align: left; }
+  .resultados { grid-template-columns: 1fr 1fr; }
+  .red { grid-column: 2; margin-left: var(--s-6); }
+
+  .resultados__media {
+    position: absolute; left: 0; top: 0; z-index: 0;
+    width: 50vw;
+    height: var(--media-h, 100%);
+    aspect-ratio: auto;
+    overflow: visible;
+    border-radius: 0;
+    background: none;
+    -webkit-mask-image:
+      linear-gradient(to right, #000 0%, #000 74%, transparent 100%),
+      linear-gradient(to bottom, #000 0%, #000 88%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to right, #000 0%, #000 74%, transparent 100%),
+      linear-gradient(to bottom, #000 0%, #000 88%, transparent 100%);
+    mask-composite: intersect;
+  }
+  .resultados__video {
+    position: sticky; top: 0;
+    height: 100vh; height: 100svh;
+    object-position: 70% 45%;
+  }
+  .resultados__media::after {
+    /* Arriba, una veladura para que la cabecera se lea sobre el cielo */
+    background:
+      linear-gradient(to bottom, color-mix(in srgb, var(--grafito) 55%, transparent) 0, transparent 160px),
+      linear-gradient(to right, transparent 60%, color-mix(in srgb, var(--bosque) 40%, transparent) 100%);
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .resultados__caption {
+    position: absolute; z-index: 1;
+    left: max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter)));
+    top: calc(min(100svh, var(--media-h, 100svh)) - var(--s-8));
+    bottom: auto;
+    color: var(--marfil);
+    text-shadow: 0 1px 12px color-mix(in srgb, var(--grafito) 70%, transparent);
+  }
+}
+
+/* Red de ejes. Sin JavaScript: lista simple con un punto por eje. */
+.red { position: relative; }
+.red__lines { display: none; }
+.red__nodes { display: grid; gap: var(--s-2); }
+.red__node,
+.red__core {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-.variables__node { position: relative; }
-.variables__node::before {
-  content: ""; position: absolute; left: calc(-1 * var(--s-4) - 4px); top: 50%;
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--arena); transform: translateY(-50%);
+.red__node {
+  display: inline-flex; align-items: center; gap: var(--s-1);
+  justify-self: start;
+  padding: 0.55rem 0.95rem;
+  border: 1px solid color-mix(in srgb, var(--arena) 38%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bosque) 88%, var(--grafito));
+  color: var(--marfil);
+  transition: border-color .4s var(--ease), background-color .4s var(--ease), box-shadow .4s var(--ease), color .4s var(--ease);
 }
-.variables__center {
-  margin-top: var(--s-6);
+.red__node::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--arena);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--arena) 18%, transparent);
+  flex: none;
+}
+.red__core {
+  margin-top: var(--s-4);
   font-family: var(--font-display);
   font-size: var(--fs-h3);
   letter-spacing: 0; text-transform: none;
   color: var(--marfil);
 }
 
-/* Escritorio: diagrama radial en retícula 3 × 3 */
-@media (min-width: 768px) {
-  .variables { aspect-ratio: 1.6; }
-  .variables__lines {
-    display: block; position: absolute; inset: 0;
-    width: 100%; height: 100%;
-  }
-  .variables__lines line {
-    stroke: var(--arena); stroke-width: 1; opacity: .5;
-    vector-effect: non-scaling-stroke;
-  }
-  .variables__list {
-    position: absolute; inset: 0;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 0; padding: 0; border: 0;
-  }
-  .variables__node {
-    place-self: center;
-    padding: var(--s-1) var(--s-2);
-    background: var(--bosque);
-    border: var(--line);
-  }
-  .variables__node::before { display: none; }
-  .variables__node--territorio    { grid-area: 1 / 2; }
-  .variables__node--productividad { grid-area: 2 / 1; }
-  .variables__node--informacion   { grid-area: 2 / 3; }
-  .variables__node--indicadores   { grid-area: 3 / 1; }
-  .variables__node--finanzas      { grid-area: 3 / 3; }
-  .variables__center {
-    position: absolute; left: 50%; top: 50%;
-    transform: translate(-50%, -50%);
-    margin: 0;
-    padding: var(--s-2) var(--s-3);
-    background: var(--bosque);
-    border: 1px solid var(--arena);
-    white-space: nowrap;
-  }
+/* Con JavaScript (.red--js): red viva. main.js coloca cada nodo con
+   --x / --y (px) y dibuja las líneas y los pulsos en el SVG. */
+.red--js { aspect-ratio: 4 / 5; touch-action: pan-y; }
+@media (min-width: 768px) { .red--js { aspect-ratio: 1 / 1; } }
+@media (min-width: 1024px) { .red--js { aspect-ratio: 4 / 3; } }
+.red--js .red__lines {
+  display: block; position: absolute; inset: 0;
+  width: 100%; height: 100%; overflow: visible;
+}
+.red--js .red__nodes { display: block; position: absolute; inset: 0; z-index: 2; }
+.red--js .red__node {
+  position: absolute; left: 0; top: 0;
+  transform: translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px)) translate(-50%, -50%);
+  max-width: 13ch; white-space: normal; text-align: left; line-height: 1.25;
+  cursor: default;
+}
+@media (min-width: 768px) { .red--js .red__node { max-width: none; white-space: nowrap; } }
+/* Teléfonos: nodos y núcleo más compactos para que nada se monte */
+@media (max-width: 767px) {
+  .red--js .red__node { font-size: 0.6875rem; letter-spacing: 0.08em; padding: 0.45rem 0.75rem; max-width: 19ch; }
+  .red--js .red__core { width: 6rem; font-size: 1.0625rem; padding: var(--s-1); }
+  .red--js .red__core::after { inset: -12px; }
+  .resultados__caption { letter-spacing: 0.1em; font-size: 0.6875rem; }
+}
+.red--js .red__core {
+  position: absolute; left: 50%; top: 50%;
+  translate: -50% -50%;
+  margin: 0;
+  width: clamp(6rem, 34%, 12.5rem); aspect-ratio: 1;
+  display: grid; place-items: center; text-align: center;
+  padding: var(--s-2);
+  line-height: 1.15;
+  border-radius: 50%;
+  border: 1px solid var(--arena);
+  background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--arena) 16%, var(--bosque)) 0%, var(--bosque) 70%);
+  box-shadow: 0 0 0 10px color-mix(in srgb, var(--arena) 6%, transparent), 0 0 60px color-mix(in srgb, var(--arena) 18%, transparent);
+}
+.red--js .red__core::after {
+  content: ""; position: absolute; inset: -18px; border-radius: 50%;
+  border: 1px dashed color-mix(in srgb, var(--arena) 35%, transparent);
+}
+.red__line {
+  stroke: var(--arena); stroke-width: 1; fill: none;
+  opacity: .32;
+  transition: opacity .4s var(--ease), stroke-width .4s var(--ease);
+}
+.red__line--ring { opacity: .14; stroke-dasharray: 3 5; }
+.red__line.is-hot { opacity: .85; stroke-width: 1.5; }
+.red__pulse { fill: var(--arena); }
+.red__node.is-hot {
+  border-color: var(--arena);
+  background: color-mix(in srgb, var(--arena) 16%, var(--bosque));
+  box-shadow: 0 0 24px color-mix(in srgb, var(--arena) 25%, transparent);
 }
 
 /* 05 · Propósito */
@@ -816,6 +939,7 @@ a { color: inherit; }
 .hero--scrub .hero__next {
   position: absolute; left: 50%; top: 50%;
   translate: -50% -50%;
+  width: min(100% - 2 * var(--gutter), 52rem);
   display: grid; justify-items: center; gap: var(--s-2);
   text-align: center; text-decoration: none;
   opacity: calc((var(--fx, 0) - 0.35) * 1.6);
@@ -940,34 +1064,27 @@ a { color: inherit; }
   will-change: transform;
 }
 
-/* 04 · Las líneas se dibujan con el scroll; los nodos se encienden */
-.motion .variables__lines line {
-  vector-effect: none;            /* main.js pasa el SVG a píxeles reales */
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
+/* 04 · La red entra: las líneas se dibujan, los nodos aparecen en cascada
+   y el núcleo respira. .is-live lo añade main.js al verla. */
+.motion .red--js .red__line { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.4s var(--ease), opacity .4s var(--ease), stroke-width .4s var(--ease); }
+.motion .red--js .red__line--ring { stroke-dasharray: 1; }
+.motion .red--js.is-live .red__line { stroke-dashoffset: 0; }
+.motion .red--js .red__node { opacity: 0; }
+.motion .red--js.is-live .red__node {
+  opacity: 1;
+  transition: opacity .8s var(--ease) calc(var(--i, 0) * 120ms + 300ms), border-color .4s var(--ease), background-color .4s var(--ease), box-shadow .4s var(--ease);
 }
-.motion .variables__node,
-.motion .variables__center {
-  opacity: .25;
-  transition: opacity .6s var(--ease), border-color .6s var(--ease);
+.motion .red--js .red__core { scale: .85; opacity: 0; transition: scale 1.2s var(--ease), opacity 1.2s var(--ease); }
+.motion .red--js.is-live .red__core { scale: 1; opacity: 1; }
+@keyframes nucleo-respira {
+  0%, 100% { transform: scale(1);    opacity: .55; }
+  50%      { transform: scale(1.06); opacity: 1; }
 }
-.motion .variables__node.is-lit,
-.motion .variables__center.is-lit { opacity: 1; }
-/* Móvil: una línea clara recorre la lista de arriba abajo */
-@media (max-width: 767px) {
-  .variables__list { position: relative; }   /* solo en móvil: en escritorio la lista es absoluta */
-}
-.motion .variables__list::after {
-  content: "";
-  position: absolute; left: -1px; top: 0; bottom: 0;
-  width: 1px;
-  background: var(--arena);
-  transform-origin: top;
-  transform: scaleY(var(--p, 0));
-}
-@media (min-width: 768px) {
-  .motion .variables__list::after { display: none; }
-}
+.motion .red--js .red__core::after { animation: nucleo-respira 4.5s ease-in-out infinite; }
+.motion .red--js .red__pulse { opacity: 0; }
+.motion .red--js.is-live .red__pulse { opacity: 1; transition: opacity .6s var(--ease) 1.4s; }
+/* La red tiene su propia entrada: no se suma la del contenedor */
+.motion .red--js[data-reveal] { opacity: 1; transform: none; }
 
 /* 05 · La imagen se abre desde la línea central */
 .motion .proposito__media {

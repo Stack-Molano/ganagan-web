@@ -21,7 +21,7 @@
         imagesrcset="./assets/images/territorio-hero-960.webp 960w, ./assets/images/territorio-hero-1672.webp 1672w"
         imagesizes="100vw" media="(min-width: 768px)">
 
-  <link rel="stylesheet" href="./css/styles.css?v=2026-11-07b">
+  <link rel="stylesheet" href="./css/styles.css?v=2026-11-07h">
   <script>document.documentElement.classList.replace('no-js', 'js');</script>
 </head>
 <body>
@@ -76,10 +76,12 @@
                alt="Vista aérea al amanecer de la sabana de los Llanos Orientales, con un hato de ganado Brahman avanzando entre la niebla y los morichales.">
         </picture>
 
-        <!-- Video controlado por el scroll: main.js le asigna el archivo solo en escritorio
-             y sin movimiento reducido. En móvil nunca se descarga. -->
+        <!-- Video controlado por el scroll: main.js le asigna el archivo solo si no se
+             pidió movimiento reducido. En teléfonos en vertical usa la versión vertical
+             (1,1 MB); con «ahorro de datos» se queda la imagen fija. -->
         <video class="hero__video" data-scrub-video
                data-src="./assets/videos/territorio-scrub.mp4"
+               data-src-portrait="./assets/videos/territorio-scrub-movil.mp4"
                muted playsinline preload="none" disablepictureinpicture
                aria-hidden="true" tabindex="-1"></video>
 
@@ -232,22 +234,30 @@
           <p class="scene__text">Territorio, productividad, información, indicadores y finanzas no son temas separados. Entender cómo se relacionan es lo que permite decidir mejor.</p>
         </header>
 
-        <div class="variables" data-variables>
-          <svg class="variables__lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-            <line pathLength="1" x1="50" y1="16.7" x2="50" y2="50" />
-            <line pathLength="1" x1="16.7" y1="50" x2="50" y2="50" />
-            <line pathLength="1" x1="83.3" y1="50" x2="50" y2="50" />
-            <line pathLength="1" x1="16.7" y1="83.3" x2="50" y2="50" />
-            <line pathLength="1" x1="83.3" y1="83.3" x2="50" y2="50" />
-          </svg>
-          <ul class="variables__list">
-            <li class="variables__node variables__node--territorio">Territorio</li>
-            <li class="variables__node variables__node--productividad">Productividad</li>
-            <li class="variables__node variables__node--informacion">Información</li>
-            <li class="variables__node variables__node--indicadores">Indicadores</li>
-            <li class="variables__node variables__node--finanzas">Finanzas</li>
-          </ul>
-          <p class="variables__center">Mejores decisiones</p>
+        <!-- Dos columnas: tecnología en campo (video en bucle) y red de ejes que
+             convergen en las decisiones. Sin cifras: solo los ejes. -->
+        <div class="resultados">
+          <figure class="resultados__media" data-reveal>
+            <video class="resultados__video" data-loop-video
+                   data-src="./assets/videos/resultados-loop.mp4"
+                   poster="./assets/images/resultados-poster-960.webp"
+                   width="1280" height="720"
+                   muted loop playsinline preload="none" disablepictureinpicture
+                   aria-hidden="true" tabindex="-1"></video>
+            <figcaption class="resultados__caption">Drones · Sensores · Datos en campo</figcaption>
+          </figure>
+
+          <div class="red" data-red data-reveal style="--d:150">
+            <svg class="red__lines" aria-hidden="true"></svg>
+            <ul class="red__nodes" aria-label="Ejes que convergen en mejores decisiones">
+              <li class="red__node" data-angle="-90">Centralización de datos</li>
+              <li class="red__node" data-angle="-18">Optimización</li>
+              <li class="red__node" data-angle="45">Rendimiento</li>
+              <li class="red__node" data-angle="135">Eficiencia de recursos</li>
+              <li class="red__node" data-angle="198">Trazabilidad</li>
+            </ul>
+            <p class="red__core">Mejores decisiones</p>
+          </div>
         </div>
 
         <p class="scene__note" data-reveal>Estamos construyendo las herramientas para lograrlo.</p>
@@ -327,6 +337,6 @@
     <p class="container site-footer__copy">© <span data-year>2026</span> Inversiones Ganagán M&amp;V S.A.S. Imágenes ilustrativas.</p>
   </footer>
 
-  <script src="./js/main.js?v=2026-11-07b" defer></script>
+  <script src="./js/main.js?v=2026-11-07h" defer></script>
 </body>
 </html>

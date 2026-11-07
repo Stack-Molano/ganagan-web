@@ -254,51 +254,176 @@
     visionMedia.style.setProperty('--p', progress(visionMedia, 1, 0).toFixed(3));
   };
 
-  /* --- Escena 04: líneas que convergen y nodos que se encienden --- */
-  const variables = document.querySelector('[data-variables]');
-  const svg = variables && variables.querySelector('.variables__lines');
-  const lines = svg ? [...svg.querySelectorAll('line')] : [];
-  const nodes = variables ? [...variables.querySelectorAll('.variables__node')] : [];
-  const center = variables && variables.querySelector('.variables__center');
-  const list = variables && variables.querySelector('.variables__list');
+  /* --- Escena 04: red viva de ejes ---
+     Cinco ejes en elipse alrededor del núcleo «Mejores decisiones». Los
+     nodos flotan, pulsos de luz viajan de cada eje al núcleo y, con el
+     mouse, la red se aparta del puntero y resalta las conexiones del eje. */
+  const red = document.querySelector('[data-red]');
+  const redSvg = red && red.querySelector('.red__lines');
+  const redNodes = red ? [...red.querySelectorAll('.red__node')] : [];
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const R = { w: 0, h: 0, cx: 0, cy: 0, base: [], spokes: [], ring: [], pulses: [], mx: null, my: null, raf: null, visible: false };
 
-  // Guarda las coordenadas originales (en %) para recalcularlas en píxeles.
-  lines.forEach((l) => {
-    ['x1', 'y1', 'x2', 'y2'].forEach((k) => { l.dataset[k] = l.getAttribute(k); });
-  });
+  if (red && redSvg && redNodes.length) {
+    red.classList.add('red--js');
+    const make = (tag, cls) => {
+      const el = document.createElementNS(SVG_NS, tag);
+      el.setAttribute('class', cls);
+      if (tag === 'line') el.setAttribute('pathLength', '1');
+      redSvg.appendChild(el);
+      return el;
+    };
+    redNodes.forEach((n, i) => { n.style.setProperty('--i', i); R.ring.push(make('line', 'red__line red__line--ring')); });
+    redNodes.forEach(() => R.spokes.push(make('line', 'red__line')));
+    redNodes.forEach(() => { const c = make('circle', 'red__pulse'); c.setAttribute('r', '2.5'); R.pulses.push(c); });
+  }
 
-  // Con píxeles reales, pathLength="1" funciona y el trazo no se deforma.
-  const sizeLines = () => {
-    if (!svg) return;
-    const { width, height } = variables.getBoundingClientRect();
-    if (!width || !height) return;
-    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
-    lines.forEach((l) => {
-      l.setAttribute('x1', (l.dataset.x1 / 100) * width);
-      l.setAttribute('x2', (l.dataset.x2 / 100) * width);
-      l.setAttribute('y1', (l.dataset.y1 / 100) * height);
-      l.setAttribute('y2', (l.dataset.y2 / 100) * height);
+  const drawRed = (t) => {
+    if (!R.base.length) return;
+    const live = root.classList.contains('motion');
+    const pos = R.base.map((b) => {
+      let x = b.x;
+      let y = b.y;
+      if (live) {
+        x += Math.sin(t * 0.0006 + b.ph) * 7;
+        y += Math.cos(t * 0.0005 + b.ph * 1.7) * 6;
+      }
+      if (R.mx !== null) {                        // se aparta del puntero
+        const dx = x - R.mx;
+        const dy = y - R.my;
+        const d = Math.hypot(dx, dy) || 1;
+        if (d < 170) {
+          const f = (1 - d / 170) * 24;
+          x += (dx / d) * f;
+          y += (dy / d) * f;
+        }
+      }
+      return { x: clamp(x, b.hw + 2, R.w - b.hw - 2), y: clamp(y, b.hh + 2, R.h - b.hh - 2) };
+    });
+    pos.forEach((p, i) => {
+      const n = redNodes[i];
+      n.style.setProperty('--x', p.x.toFixed(1));
+      n.style.setProperty('--y', p.y.toFixed(1));
+      const q = pos[(i + 1) % pos.length];
+      const set = (el, x1, y1, x2, y2) => {
+        el.setAttribute('x1', x1.toFixed(1)); el.setAttribute('y1', y1.toFixed(1));
+        el.setAttribute('x2', x2.toFixed(1)); el.setAttribute('y2', y2.toFixed(1));
+      };
+      set(R.spokes[i], p.x, p.y, R.cx, R.cy);
+      set(R.ring[i], p.x, p.y, q.x, q.y);
+      // Pulso: recorre el eje hasta el núcleo cada 2,8 s, desfasado por eje
+      const f = ((t + i * 560) % 2800) / 2800;
+      const e = f * f * (3 - 2 * f);
+      const c = R.pulses[i];
+      c.setAttribute('cx', (p.x + (R.cx - p.x) * e).toFixed(1));
+      c.setAttribute('cy', (p.y + (R.cy - p.y) * e).toFixed(1));
+      c.setAttribute('opacity', live ? Math.sin(Math.PI * f).toFixed(2) : '0');
     });
   };
 
-  const updateVariables = () => {
-    if (!variables || !inView(variables)) return;
-    const p = progress(variables, 0.9, 0.3);
-    const isList = !svg || svg.getBoundingClientRect().width === 0;   // móvil: lista vertical
-    // Escritorio: cada línea empieza un poco después de la anterior
-    // y su nodo se enciende cuando la línea arranca.
-    lines.forEach((l, i) => {
-      const lp = clamp((p - i * 0.1) / 0.5);
-      l.style.strokeDashoffset = (1 - lp).toFixed(3);
-      if (!isList && nodes[i]) nodes[i].classList.toggle('is-lit', lp > 0.05);
+  // Escritorio: alto del video de fondo = desde el borde superior de la
+  // escena hasta un poco más abajo de las dos columnas.
+  const resultados = document.querySelector('.resultados');
+  const sizeResultadosMedia = () => {
+    const scene = resultados && resultados.closest('[data-scene]');
+    if (!scene || !resultados.offsetHeight) return;
+    scene.style.setProperty('--media-h', `${resultados.offsetTop + resultados.offsetHeight + 40}px`);
+  };
+
+  const sizeRed = () => {
+    sizeResultadosMedia();
+    if (!red || !red.offsetWidth || !redNodes.length) return;
+    R.w = red.clientWidth;
+    R.h = red.clientHeight;
+    R.cx = R.w / 2;
+    R.cy = R.h / 2;
+    redSvg.setAttribute('viewBox', `0 0 ${R.w} ${R.h}`);
+    const rx = R.w * (R.w < 600 ? 0.3 : 0.36);
+    const ry = R.h * (R.w < 600 ? 0.4 : 0.38);
+    R.base = redNodes.map((n, i) => {
+      const a = (Number(n.dataset.angle) * Math.PI) / 180;
+      return {
+        x: R.cx + Math.cos(a) * rx,
+        y: R.cy + Math.sin(a) * ry,
+        hw: n.offsetWidth / 2,
+        hh: n.offsetHeight / 2,
+        ph: (R.base[i] && R.base[i].ph) || Math.random() * Math.PI * 2,
+      };
     });
-    // Móvil: cada nodo se enciende cuando la línea vertical lo alcanza.
-    if (isList) {
-      nodes.forEach((n, i) => n.classList.toggle('is-lit', p >= (i + 0.5) / nodes.length));
+    drawRed(performance.now());
+  };
+
+  const loopRed = (t) => {
+    R.raf = null;
+    if (!R.visible || !root.classList.contains('motion')) return;
+    drawRed(t);
+    R.raf = requestAnimationFrame(loopRed);
+  };
+  const kickRed = () => {
+    if (!R.raf && R.visible && root.classList.contains('motion')) R.raf = requestAnimationFrame(loopRed);
+  };
+
+  if (red && R.spokes.length) {
+    const setHot = (idx) => {
+      redNodes.forEach((n, i) => n.classList.toggle('is-hot', i === idx));
+      R.spokes.forEach((l, i) => l.classList.toggle('is-hot', i === idx));
+      R.ring.forEach((l, i) => l.classList.toggle('is-hot', idx >= 0 && (i === idx || (i + 1) % R.ring.length === idx)));
+    };
+    red.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const r = red.getBoundingClientRect();
+      R.mx = e.clientX - r.left;
+      R.my = e.clientY - r.top;
+      const node = e.target.closest('.red__node');
+      setHot(node ? redNodes.indexOf(node) : -1);
+      if (!root.classList.contains('motion')) drawRed(performance.now());
+    });
+    red.addEventListener('pointerleave', () => {
+      R.mx = null;
+      R.my = null;
+      setHot(-1);
+      if (!root.classList.contains('motion')) drawRed(performance.now());
+    });
+    window.addEventListener('resize', sizeRed);
+    // El ancho de cada nodo cambia cuando carga su fuente: se mide de nuevo
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeRed);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([entry]) => {
+        R.visible = entry.isIntersecting;
+        if (R.visible) {
+          sizeRed();
+          red.classList.add('is-live');
+          kickRed();
+        }
+      }, { threshold: 0.2 }).observe(red);
+    } else {
+      red.classList.add('is-live');
     }
-    if (center) center.classList.toggle('is-lit', p > 0.97);
-    // Móvil: la línea vertical avanza con el progreso.
-    if (list) list.style.setProperty('--p', p.toFixed(3));
+  }
+
+  /* --- Videos en bucle (escena 04) ---
+     Se descargan solo al aparecer en pantalla y se pausan al salir.
+     Con movimiento reducido se queda la imagen fija (poster). */
+  const loopVideos = [...document.querySelectorAll('[data-loop-video]')];
+  let loopObserver = null;
+  const startLoops = () => {
+    if (!loopVideos.length || !('IntersectionObserver' in window)) return;
+    loopObserver = new IntersectionObserver((entries) => {
+      entries.forEach(({ target: v, isIntersecting }) => {
+        if (isIntersecting) {
+          if (!v.getAttribute('src')) { v.src = v.dataset.src; v.preload = 'auto'; }
+          const played = v.play();
+          if (played && played.catch) played.catch(() => {});
+        } else {
+          v.pause();
+        }
+      });
+    }, { threshold: 0.25 });
+    loopVideos.forEach((v) => loopObserver.observe(v));
+  };
+  const stopLoops = () => {
+    if (loopObserver) loopObserver.disconnect();
+    loopVideos.forEach((v) => v.pause());
   };
 
   /* --- Escena 05: máscara que se abre desde la línea central --- */
@@ -315,6 +440,10 @@
      `prop` es la variable CSS con el progreso 0→1. El video se descarga
      cuando la sección está a menos de dos pantallas. */
   const desktopQuery = window.matchMedia('(min-width: 1024px)');
+  // Pantallas estrechas en vertical (teléfonos): versión vertical del video
+  const portraitQuery = window.matchMedia('(max-aspect-ratio: 2/3)');
+  // Con «ahorro de datos» activado, el móvil se queda con la imagen fija
+  const saveData = !!(navigator.connection && navigator.connection.saveData);
 
   const makeScrub = (section, cls, prop) => {
     const video = section && section.querySelector('[data-scrub-video]');
@@ -349,7 +478,8 @@
     };
     const load = () => {
       if (video.getAttribute('src')) return;
-      video.src = video.dataset.src;
+      video.dataset.active = (portraitQuery.matches && video.dataset.srcPortrait) || video.dataset.src;
+      video.src = video.dataset.active;
       video.preload = 'auto';
       video.load();
     };
@@ -383,6 +513,13 @@
     video.addEventListener('seeked', () => { s.seeking = false; kick(); });
     video.addEventListener('error', fail);
     video.addEventListener('loadeddata', () => {
+      // iOS no pinta los fotogramas al buscar hasta que el video se reproduce
+      // una vez: se reproduce y se pausa al instante (está silenciado).
+      if (!s.primed) {
+        s.primed = true;
+        const played = video.play();
+        if (played && played.then) played.then(() => { video.pause(); s.update(); }).catch(() => {});
+      }
       video.classList.add('is-ready');
       s.update();
     });
@@ -393,9 +530,10 @@
       const canSeek = video.seekable.length && video.seekable.end(0) >= video.duration - 0.5;
       if (canSeek || video.src.startsWith('blob:')) return;
       try {
-        const res = await fetch(video.dataset.src);
+        const res = await fetch(video.dataset.active);
         if (!res.ok) throw new Error(res.status);
         const blob = await res.blob();
+        s.primed = false;
         video.src = URL.createObjectURL(blob);
         video.load();
       } catch (err) {
@@ -432,11 +570,13 @@
   /* Escena 03 · praderas y silvopastoreo */
   const visionScrub = makeScrub(document.querySelector('[data-vision-stage]'), 'vision--scrub', '--vp');
 
-  const startScrub = () => { heroScrub.start(); visionScrub.start(); };
   const stopScrub = () => { heroScrub.stop(); visionScrub.stop(); };
+  /* La portada recorre su video en todas las pantallas (en teléfonos, con la
+     versión vertical); la escena 03, solo en escritorio. */
   const syncScrub = () => {
-    if (motionQuery.matches && desktopQuery.matches) startScrub();
-    else stopScrub();
+    if (!motionQuery.matches) { stopScrub(); return; }
+    if (desktopQuery.matches || !saveData) heroScrub.start(); else heroScrub.stop();
+    if (desktopQuery.matches) visionScrub.start(); else visionScrub.stop();
   };
   desktopQuery.addEventListener('change', () => { syncScrub(); onResize(); });
 
@@ -449,11 +589,10 @@
       updateHero();
       visionScrub.update();
       updateVision();
-      updateVariables();
       updateProposito();
     });
   };
-  const onResize = () => { sizeLines(); onScroll(); };
+  const onResize = () => { sizeRed(); onScroll(); };
 
   /* Al abrir un capítulo: sus apariciones se repiten, las líneas de la
      escena 04 se miden de nuevo y los efectos por scroll se recalculan. */
@@ -463,15 +602,18 @@
       el.classList.remove('is-in');
       observeReveal(el);
     });
-    sizeLines();
+    // La red vuelve a entrar (líneas que se dibujan) cada vez que se abre
+    if (red && section.contains(red)) red.classList.remove('is-live');
+    sizeRed();
     onScroll();
   };
 
   const enableMotion = () => {
     root.classList.add('motion');
     syncScrub();
-    sizeLines();
+    sizeRed();
     startReveals();
+    startLoops();
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize);
@@ -489,7 +631,8 @@
     window.removeEventListener('resize', onResize);
     if (revealObserver) revealObserver.disconnect();
     reveals.forEach((el) => el.classList.add('is-in'));
-    lines.forEach((l) => l.style.removeProperty('stroke-dashoffset'));
+    stopLoops();
+    drawRed(performance.now());
   };
 
   if (motionQuery.matches) enableMotion();
