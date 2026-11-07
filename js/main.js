@@ -81,11 +81,119 @@
         links.forEach((a) => a.removeAttribute('aria-current'));
         const active = links.get(entry.target.id);
         if (active) active.setAttribute('aria-current', 'true');
-        if (sceneIndex) sceneIndex.classList.toggle('on-light', entry.target.id === 'vision');
+        if (sceneIndex) sceneIndex.classList.toggle('on-light', entry.target.id === 'que-hacemos');
       });
     }, { rootMargin: '-45% 0px -45% 0px' });
 
     document.querySelectorAll('[data-scene]').forEach((s) => observer.observe(s));
+  }
+
+  /* ---------- Navegación por capítulos ----------
+     Cada escena es un capítulo: solo se ve una a la vez y se llega a las
+     demás con el menú o con el enlace «Siguiente» de cada escena. La
+     dirección (#que-somos, #resultados…) permite volver con Atrás y
+     compartir un capítulo. Sin JavaScript, el sitio se ve todo seguido. */
+  const root = document.documentElement;
+  const scenes = [...document.querySelectorAll('[data-scene]')];
+  const sceneIds = new Set(scenes.map((s) => s.id));
+  const footer = document.querySelector('.site-footer');
+  // Direcciones antiguas, por si alguien guardó un enlace
+  const legacy = {
+    territorio: 'inicio', esencia: 'que-somos', vision: 'que-hacemos',
+    inteligencia: 'resultados', identidad: 'contacto',
+  };
+  // Opción del menú que se marca en cada capítulo
+  const navFor = {
+    inicio: 'inicio', 'que-somos': 'que-somos', 'que-hacemos': 'que-somos',
+    resultados: 'resultados', proposito: 'resultados', contacto: 'contacto',
+  };
+  let current = null;
+  let leaveTimer = null;
+  let afterShow = () => {};          // lo completa la parte de animaciones
+
+  // Capítulo de una dirección: '' → inicio; un ancla ajena (#contenido) → null
+  const sceneFromHash = (hash) => {
+    let id = '';
+    try { id = decodeURIComponent(hash.replace(/^#/, '')); } catch (e) { return null; }
+    if (!id) return 'inicio';
+    id = legacy[id] || id;
+    return sceneIds.has(id) ? id : null;
+  };
+  const urlFor = (id) => (id === 'inicio' ? location.pathname + location.search : `#${id}`);
+
+  const swap = (id, { focus = false, enter = false } = {}) => {
+    const next = document.getElementById(id);
+    scenes.forEach((s) => s.classList.toggle('is-active', s === next));
+    root.dataset.route = id;
+    current = id;
+    document.title = `Ganagán · ${next.dataset.title}`;
+    document.querySelectorAll('.site-nav a').forEach((a) => {
+      if (a.getAttribute('href') === `#${navFor[id]}`) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+    // Cada capítulo empieza arriba, con la cabecera visible
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    window.dispatchEvent(new Event('scroll'));
+    if (enter) {
+      const parts = [next, footer].filter(Boolean);
+      parts.forEach((el) => el.classList.add('is-entering'));
+      setTimeout(() => parts.forEach((el) => el.classList.remove('is-entering')), 2200);
+    }
+    afterShow(next);
+    // Con teclado, el foco pasa al título del capítulo nuevo
+    if (focus) {
+      const title = next.querySelector('h1, h2');
+      if (title) {
+        title.setAttribute('tabindex', '-1');
+        title.focus({ preventScroll: true });
+      }
+    }
+  };
+
+  const show = (id, { animate = false, focus = false } = {}) => {
+    if (id === current) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    clearTimeout(leaveTimer);
+    const withMotion = animate && current && root.classList.contains('motion');
+    if (!withMotion) {
+      root.classList.remove('is-leaving');
+      swap(id, { focus });
+      return;
+    }
+    // La escena actual se apaga y luego entra la nueva
+    root.classList.add('is-leaving');
+    leaveTimer = setTimeout(() => {
+      root.classList.remove('is-leaving');
+      swap(id, { focus, enter: true });
+    }, 350);
+  };
+
+  if (scenes.length) {
+    document.addEventListener('click', (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      const id = sceneFromHash(a.getAttribute('href'));
+      if (!id || !a.getAttribute('href').slice(1)) return;
+      e.preventDefault();
+      if (id !== current) history.pushState(null, '', urlFor(id));
+      show(id, { animate: true, focus: e.detail === 0 });
+    });
+    window.addEventListener('popstate', () => {
+      const id = sceneFromHash(location.hash);
+      if (!id) return;
+      // Una dirección antigua (#esencia) se reescribe con la nueva (#que-somos)
+      if (location.hash && `#${id}` !== location.hash) history.replaceState(null, '', urlFor(id));
+      show(id, { animate: true });
+    });
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+    root.classList.add('is-routed');
+    const first = sceneFromHash(location.hash) || 'inicio';
+    if (location.hash && `#${first}` !== location.hash) history.replaceState(null, '', urlFor(first));
+    swap(first);
   }
 
   /* =========================================================
@@ -94,7 +202,6 @@
      Todo lo que se mueve usa transform, opacity o clip-path, y
      el trabajo por scroll se agrupa en un solo requestAnimationFrame.
      ========================================================= */
-  const root = document.documentElement;
   const motionQuery = window.matchMedia('(prefers-reduced-motion: no-preference)');
   const clamp = (v, min = 0, max = 1) => Math.min(max, Math.max(min, v));
 
@@ -114,6 +221,16 @@
   const reveals = [...document.querySelectorAll('[data-reveal]')];
   let revealObserver = null;
 
+  /* Un elemento recortado (data-reveal="clip") no cuenta como visible para el
+     navegador mientras está recortado, así que se vigila su contenedor. */
+  const revealOwners = new Map();
+  const observeReveal = (el) => {
+    if (!revealObserver) return;
+    const target = el.dataset.reveal === 'clip' ? el.parentElement : el;
+    if (target !== el) revealOwners.set(target, [...(revealOwners.get(target) || []).filter((x) => x !== el), el]);
+    revealObserver.observe(target);
+  };
+
   const startReveals = () => {
     if (!('IntersectionObserver' in window)) {
       reveals.forEach((el) => el.classList.add('is-in'));
@@ -122,12 +239,12 @@
     revealObserver = new IntersectionObserver((entries, obs) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('is-in');
+          (revealOwners.get(entry.target) || [entry.target]).forEach((el) => el.classList.add('is-in'));
           obs.unobserve(entry.target);
         }
       });
     }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
-    reveals.forEach((el) => revealObserver.observe(el));
+    reveals.forEach(observeReveal);
   };
 
   /* --- Escena 03: la ladera se acerca mientras entra --- */
@@ -239,7 +356,7 @@
 
     s.progress = progress;
     s.update = () => {
-      if (!s.on) return;
+      if (!s.on || !section.offsetHeight) return;     // capítulo oculto: nada que hacer
       if (section.getBoundingClientRect().top < window.innerHeight * 2) load();
       if (!inView(section)) return;
       const p = progress();
@@ -291,6 +408,7 @@
   /* Escena 01 · portada */
   const hero = document.querySelector('[data-hero]');
   const heroScrub = makeScrub(hero, 'hero--scrub', '--hp');
+  const heroNext = hero && hero.querySelector('.hero__next');
 
   /* Transición 01 → 02: --fx (0→1) desenfoca y oscurece la portada al salir.
      Con video, en el último tramo del recorrido fijo; sin video, mientras
@@ -301,6 +419,10 @@
     if (heroScrub.on) fx = clamp((heroScrub.progress() - 0.78) / 0.22);
     else fx = clamp(-hero.getBoundingClientRect().top / (window.innerHeight * 0.8));
     hero.style.setProperty('--fx', fx.toFixed(3));
+    // Al final del recorrido, el siguiente capítulo se puede pulsar
+    const exit = heroScrub.on && fx > 0.6;
+    hero.classList.toggle('is-exit', exit);
+    if (heroNext) heroNext.tabIndex = exit ? 0 : -1;
   };
   const updateHero = () => {
     updateHeroExit();
@@ -332,6 +454,18 @@
     });
   };
   const onResize = () => { sizeLines(); onScroll(); };
+
+  /* Al abrir un capítulo: sus apariciones se repiten, las líneas de la
+     escena 04 se miden de nuevo y los efectos por scroll se recalculan. */
+  afterShow = (section) => {
+    if (!root.classList.contains('motion')) return;
+    section.querySelectorAll('[data-reveal]').forEach((el) => {
+      el.classList.remove('is-in');
+      observeReveal(el);
+    });
+    sizeLines();
+    onScroll();
+  };
 
   const enableMotion = () => {
     root.classList.add('motion');

@@ -29,7 +29,7 @@
 
   <!-- Cabecera y menú -->
   <header class="site-header" data-header>
-    <a class="brand" href="#territorio" aria-label="Ganagán, volver al inicio">
+    <a class="brand" href="#inicio" aria-label="Ganagán, volver al inicio">
       <img class="brand__mark" src="./assets/icons/ganagan-isotipo-marfil.svg" alt="" width="48" height="53">
       <span class="brand__name">Ganagán</span>
     </a>
@@ -41,9 +41,9 @@
 
     <nav class="site-nav" id="menu-principal" aria-label="Principal" data-menu>
       <ul>
-        <li><a href="#territorio">Home</a></li>
-        <li><a href="#esencia">¿Qué somos? ¿Qué hacemos?</a></li>
-        <li><a href="#inteligencia">Resultados</a></li>
+        <li><a href="#inicio">Home</a></li>
+        <li><a href="#que-somos">¿Qué somos? ¿Qué hacemos?</a></li>
+        <li><a href="#resultados">Resultados</a></li>
         <li><a href="#contacto">Contáctenos</a></li>
       </ul>
     </nav>
@@ -52,19 +52,19 @@
   <!-- Indicador de escenas (escritorio) -->
   <nav class="scene-index" aria-label="Escenas">
     <ol>
-      <li><a href="#territorio" data-scene-link="territorio"><span class="visually-hidden">Escena </span>01</a></li>
-      <li><a href="#esencia" data-scene-link="esencia"><span class="visually-hidden">Escena </span>02</a></li>
-      <li><a href="#vision" data-scene-link="vision"><span class="visually-hidden">Escena </span>03</a></li>
-      <li><a href="#inteligencia" data-scene-link="inteligencia"><span class="visually-hidden">Escena </span>04</a></li>
+      <li><a href="#inicio" data-scene-link="inicio"><span class="visually-hidden">Escena </span>01</a></li>
+      <li><a href="#que-somos" data-scene-link="que-somos"><span class="visually-hidden">Escena </span>02</a></li>
+      <li><a href="#que-hacemos" data-scene-link="que-hacemos"><span class="visually-hidden">Escena </span>03</a></li>
+      <li><a href="#resultados" data-scene-link="resultados"><span class="visually-hidden">Escena </span>04</a></li>
       <li><a href="#proposito" data-scene-link="proposito"><span class="visually-hidden">Escena </span>05</a></li>
-      <li><a href="#identidad" data-scene-link="identidad"><span class="visually-hidden">Escena </span>06</a></li>
+      <li><a href="#contacto" data-scene-link="contacto"><span class="visually-hidden">Escena </span>06</a></li>
     </ol>
   </nav>
 
   <main id="contenido">
 
     <!-- ESCENA 01 · EL TERRITORIO -->
-    <section class="scene scene--hero" id="territorio" data-scene data-hero aria-labelledby="t-territorio">
+    <section class="scene scene--hero" id="inicio" data-scene data-title="Tradición que evoluciona" data-hero aria-labelledby="t-territorio">
       <div class="hero__sticky">
         <picture class="hero__media">
           <source media="(min-width: 768px)"
@@ -95,12 +95,18 @@
           <line x1="0" y1="0.5" x2="100" y2="0.5" />
         </svg>
 
-        <a class="scroll-cue" href="#esencia">Descubre</a>
+        <a class="scroll-cue" href="#que-somos">Descubre</a>
+
+        <!-- Al final del recorrido del video aparece la invitación al siguiente capítulo -->
+        <a class="hero__next" href="#que-somos" tabindex="-1">
+          <span class="hero__next-label">Siguiente · 02</span>
+          <span class="hero__next-title">¿Qué somos? ¿Qué hacemos?</span>
+        </a>
       </div>
     </section>
 
     <!-- ESCENA 02 · NUESTRA ESENCIA -->
-    <section class="scene scene--esencia" id="esencia" data-scene aria-labelledby="t-esencia">
+    <section class="scene scene--esencia" id="que-somos" data-scene data-title="¿Qué somos?" aria-labelledby="t-esencia">
       <div class="container">
         <header class="scene__header esencia__header">
           <p class="eyebrow" data-reveal>02 · Nuestra esencia</p>
@@ -159,11 +165,18 @@
           </li>
         </ul>
         <p class="cards__hint" aria-hidden="true">Desliza →</p>
+        <nav class="scene-next" aria-label="Siguiente capítulo">
+          <a href="#que-hacemos">
+            <span class="scene-next__label">Siguiente · 03</span>
+            <span class="scene-next__title">Qué hacemos: nuestra visión</span>
+            <span class="scene-next__arrow" aria-hidden="true">→</span>
+          </a>
+        </nav>
       </div>
     </section>
 
     <!-- ESCENA 03 · NUESTRA VISIÓN -->
-    <section class="scene scene--vision" id="vision" data-scene aria-labelledby="t-vision">
+    <section class="scene scene--vision" id="que-hacemos" data-scene data-title="¿Qué hacemos?" aria-labelledby="t-vision">
       <div class="vision__stage" data-vision-stage>
         <div class="vision__sticky">
           <figure class="vision__media" data-vision-media>
@@ -200,11 +213,18 @@
             <p>Corregir el rumbo con datos, no solo con intuición.</p>
           </li>
         </ol>
+        <nav class="scene-next" aria-label="Siguiente capítulo">
+          <a href="#resultados">
+            <span class="scene-next__label">Siguiente · 04</span>
+            <span class="scene-next__title">Inteligencia ganadera</span>
+            <span class="scene-next__arrow" aria-hidden="true">→</span>
+          </a>
+        </nav>
       </div>
     </section>
 
     <!-- ESCENA 04 · INTELIGENCIA GANADERA -->
-    <section class="scene scene--inteligencia" id="inteligencia" data-scene aria-labelledby="t-inteligencia">
+    <section class="scene scene--inteligencia" id="resultados" data-scene data-title="Inteligencia ganadera" aria-labelledby="t-inteligencia">
       <div class="container">
         <header class="scene__header scene__header--center" data-reveal>
           <p class="eyebrow">04 · Inteligencia ganadera</p>
@@ -231,11 +251,18 @@
         </div>
 
         <p class="scene__note" data-reveal>Estamos construyendo las herramientas para lograrlo.</p>
+        <nav class="scene-next" aria-label="Siguiente capítulo">
+          <a href="#proposito">
+            <span class="scene-next__label">Siguiente · 05</span>
+            <span class="scene-next__title">Nuestro propósito</span>
+            <span class="scene-next__arrow" aria-hidden="true">→</span>
+          </a>
+        </nav>
       </div>
     </section>
 
     <!-- ESCENA 05 · NUESTRO PROPÓSITO -->
-    <section class="scene scene--proposito" id="proposito" data-scene aria-labelledby="t-proposito">
+    <section class="scene scene--proposito" id="proposito" data-scene data-title="Nuestro propósito" aria-labelledby="t-proposito">
       <picture class="proposito__media">
         <source media="(min-width: 768px)"
                 srcset="./assets/images/proposito-horizonte-960.webp 960w, ./assets/images/proposito-horizonte-1672.webp 1672w"
@@ -249,21 +276,35 @@
         <p class="eyebrow">05 · Nuestro propósito</p>
         <h2 class="scene__title" id="t-proposito">Una nueva perspectiva para el desarrollo ganadero.</h2>
         <p class="scene__text">Del llano a la montaña, creemos en una ganadería que crece con su territorio: más eficiente, mejor informada y comprometida con las regiones donde trabaja.</p>
+        <nav class="scene-next" aria-label="Siguiente capítulo">
+          <a href="#contacto">
+            <span class="scene-next__label">Siguiente · 06</span>
+            <span class="scene-next__title">Identidad y contacto</span>
+            <span class="scene-next__arrow" aria-hidden="true">→</span>
+          </a>
+        </nav>
       </div>
     </section>
 
     <!-- ESCENA 06 · IDENTIDAD GANAGÁN -->
-    <section class="scene scene--identidad" id="identidad" data-scene aria-labelledby="t-identidad">
+    <section class="scene scene--identidad" id="contacto" data-scene data-title="Contáctenos" aria-labelledby="t-identidad">
       <div class="container identidad">
         <img class="identidad__logo" data-reveal="clip" src="./assets/icons/ganagan-logo-marfil.svg" width="1085" height="1449" loading="lazy"
              alt="Logotipo de Inversiones Ganagán">
         <h2 class="identidad__claim" id="t-identidad" data-reveal style="--d:900">GANAGÁN. <span>Tradición que evoluciona.</span></h2>
+        <nav class="scene-next scene-next--home" aria-label="Volver al inicio">
+          <a href="#inicio">
+            <span class="scene-next__label">Volver</span>
+            <span class="scene-next__title">Al inicio</span>
+            <span class="scene-next__arrow" aria-hidden="true">→</span>
+          </a>
+        </nav>
       </div>
     </section>
 
   </main>
 
-  <footer class="site-footer" id="contacto">
+  <footer class="site-footer" id="pie">
     <div class="container site-footer__grid">
       <div>
         <img src="./assets/icons/ganagan-isotipo-marfil.svg" alt="" width="48" height="53" loading="lazy">

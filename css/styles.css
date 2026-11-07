@@ -743,6 +743,106 @@ a { color: inherit; }
 }
 .identidad__claim span { display: block; font-weight: 300; letter-spacing: -0.01em; }
 
+/* ---------- 6b. Navegación por capítulos ----------
+   Con JavaScript (.is-routed, la añade main.js) solo se ve la escena
+   activa; el resto queda oculto y sus imágenes diferidas no se descargan.
+   La portada no muestra pie de página. Sin JavaScript todo se ve seguido. */
+.is-routed [data-scene]:not(.is-active) { display: none !important; }
+.is-routed[data-route="inicio"] .site-footer { display: none; }
+/* Cada capítulo empieza arriba: el texto no puede quedar bajo la cabecera */
+.is-routed .scene--esencia,
+.is-routed .scene--inteligencia,
+.is-routed .scene--identidad {
+  padding-top: max(var(--scene-pad), calc(var(--header-h) + var(--s-6)));
+}
+
+/* Enlace al siguiente capítulo, al final de cada escena */
+.scene-next {
+  margin-top: var(--s-12);
+  border-top: var(--line);
+  width: 100%;
+}
+.scene-next a {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: var(--s-1) var(--s-3);
+  padding-top: var(--s-4);
+  text-decoration: none;
+}
+.scene-next__label {
+  grid-column: 1 / -1;
+  font-family: var(--font-ui);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--arena);
+}
+.scene-next__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 1.2rem + 2.2vw, 3.25rem);
+  font-weight: 300;
+  line-height: 1.1;
+  background: linear-gradient(currentColor, currentColor) no-repeat left bottom / 0 1px;
+  transition: background-size .5s var(--ease);
+  justify-self: start;
+}
+.scene-next__arrow {
+  font-family: var(--font-ui);
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+  line-height: 1;
+  color: var(--arena);
+  transition: transform .5s var(--ease);
+}
+.scene-next a:hover .scene-next__title,
+.scene-next a:focus-visible .scene-next__title { background-size: 100% 1px; }
+.scene-next a:hover .scene-next__arrow,
+.scene-next a:focus-visible .scene-next__arrow { transform: translateX(8px); }
+/* Escena clara (03): tonos tierra */
+.scene--vision .scene-next { border-top-color: color-mix(in srgb, var(--tierra) 45%, transparent); }
+.scene--vision .scene-next__label,
+.scene--vision .scene-next__arrow { color: var(--tierra); }
+/* Escena 05: el enlace queda sobre la imagen, más cerca del texto */
+.scene--proposito .scene-next { margin-top: var(--s-8); }
+/* Escena 06: centrado y discreto, de vuelta al inicio */
+.scene-next--home { max-width: 28rem; }
+.scene-next--home a { grid-template-columns: auto auto; justify-content: center; text-align: center; }
+.scene-next--home .scene-next__title { font-size: var(--fs-h3); }
+.scene-next--home .scene-next__arrow { font-size: var(--fs-h3); }
+
+/* Escena 01 con video: al terminar el recorrido aparece el siguiente capítulo */
+.hero__next { display: none; }
+.hero--scrub .hero__next {
+  position: absolute; left: 50%; top: 50%;
+  translate: -50% -50%;
+  display: grid; justify-items: center; gap: var(--s-2);
+  text-align: center; text-decoration: none;
+  opacity: calc((var(--fx, 0) - 0.35) * 1.6);
+  pointer-events: none;
+}
+.hero--scrub.is-exit .hero__next { pointer-events: auto; }
+.hero__next-label {
+  font-family: var(--font-ui);
+  font-size: var(--fs-label); font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--arena);
+}
+.hero__next-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  font-weight: 300;
+  line-height: 1.08;
+  padding-bottom: var(--s-1);
+  background: linear-gradient(var(--arena), var(--arena)) no-repeat center bottom / 0 1px;
+  transition: background-size .5s var(--ease);
+}
+.hero__next:hover .hero__next-title,
+.hero__next:focus-visible .hero__next-title { background-size: 100% 1px; }
+
+/* Enlace del menú de la escena actual: queda subrayado */
+.site-nav a[aria-current="page"] { background-size: 100% 1px; }
+
 /* ---------- 7. Pie de página ---------- */
 .site-footer {
   border-top: var(--line);
@@ -882,6 +982,30 @@ a { color: inherit; }
   transition: clip-path 1.8s var(--ease) .2s;
 }
 .motion [data-reveal="clip"].is-in { clip-path: inset(0 0 0 0); }
+
+/* Cambio de capítulo: la escena actual se desenfoca y se apaga;
+   la nueva emerge del desenfoque (main.js añade .is-leaving / .is-entering). */
+.motion.is-leaving main,
+.motion.is-leaving .site-footer {
+  opacity: 0;
+  filter: blur(10px);
+  transition: opacity .35s var(--ease), filter .35s var(--ease);
+}
+@keyframes escena-entra {
+  from { opacity: 0; filter: blur(16px); }
+  to   { opacity: 1; filter: blur(0); }
+}
+.motion .is-entering { animation: escena-entra 1s var(--ease) both; }
+/* Las escenas que se animaban al entrar desde la anterior (03 y 05)
+   repiten esa entrada al abrirse como capítulo. */
+@keyframes ladera-entra { from { transform: scale(1.16); } }
+.motion .scene--vision.is-entering:not(:has(.vision--scrub)) .vision__media img {
+  animation: ladera-entra 2.2s var(--ease) both;
+}
+@keyframes montana-abre { from { clip-path: inset(50% 0); } }
+.motion .scene--proposito.is-entering .proposito__media {
+  animation: montana-abre 1.8s var(--ease) .15s both;
+}
 
 /* ---------- 9. Movimiento reducido ---------- */
 @media (prefers-reduced-motion: reduce) {
