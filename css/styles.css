@@ -19,6 +19,12 @@
   font-display: swap;
 }
 @font-face {
+  font-family: "Space Grotesk";
+  src: url("../assets/fonts/space-grotesk-variable.woff2") format("woff2");
+  font-weight: 300 700;
+  font-display: swap;
+}
+@font-face {
   font-family: "IBM Plex Mono";
   src: url("../assets/fonts/ibm-plex-mono-400.woff2") format("woff2");
   font-weight: 400;
@@ -42,6 +48,7 @@
   --font-display: "Fraunces", Georgia, "Times New Roman", serif;
   --font-body: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --font-ui: "Space Grotesk", "Manrope", system-ui, sans-serif;
 
   --fs-hero: clamp(2.125rem, 0.9rem + 6vw, 6rem);     /* ~38 px en móvil → 96 px */
   --fs-h2:   clamp(2rem, 1.2rem + 3vw, 3.75rem);
@@ -60,7 +67,7 @@
   --container: 80rem;            /* 1280 px */
   --gutter: clamp(1.25rem, 4vw, 3rem);
 
-  --header-h: 4.5rem;
+  --header-h: 5.25rem;
   --line: 1px solid color-mix(in srgb, var(--arena) 55%, transparent);
   --ease: cubic-bezier(.22, .61, .36, 1);
 }
@@ -175,34 +182,46 @@ a { color: inherit; }
   display: flex; align-items: center; gap: var(--s-2);
   text-decoration: none;
 }
-.brand__mark { width: 2.5rem; height: auto; }
+.brand__mark { width: 2.875rem; height: auto; }
 .brand__name {
   font-family: var(--font-display);
-  font-size: 1.375rem;
+  font-size: 1.625rem;
   letter-spacing: 0.02em;
 }
 
-.site-nav ul { display: flex; gap: var(--s-4); }
+/* Botones de navegación: píldoras con borde fino arena */
+.site-nav ul { display: flex; gap: var(--s-1); }
 .site-nav a {
-  font-size: var(--fs-small);
+  display: inline-flex; align-items: center;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   text-decoration: none;
-  padding-block: var(--s-1);
-  background: linear-gradient(var(--arena), var(--arena)) no-repeat left bottom / 0 1px;
-  transition: background-size .35s var(--ease);
+  padding: 0.6rem 1.15rem;
+  border: 1px solid color-mix(in srgb, var(--arena) 42%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--grafito) 25%, transparent);
+  transition: border-color .35s var(--ease), background-color .35s var(--ease), color .35s var(--ease);
 }
 .site-nav a:hover,
-.site-nav a:focus-visible { background-size: 100% 1px; }
+.site-nav a:focus-visible {
+  border-color: var(--arena);
+  background: color-mix(in srgb, var(--arena) 14%, transparent);
+  color: var(--marfil);
+}
 
 .menu-toggle {
   display: none;
   align-items: center; gap: var(--s-1);
-  background: none; border: 0; padding: var(--s-1);
+  background: color-mix(in srgb, var(--grafito) 25%, transparent);
+  border: 1px solid color-mix(in srgb, var(--arena) 42%, transparent);
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
   color: var(--marfil);
-  font: 500 var(--fs-small) / 1 var(--font-body);
-  letter-spacing: 0.08em; text-transform: uppercase;
+  font: 500 0.9375rem / 1 var(--font-ui);
+  letter-spacing: 0.06em; text-transform: uppercase;
   cursor: pointer;
 }
 .menu-toggle__icon,
@@ -232,6 +251,8 @@ a { color: inherit; }
     font-family: var(--font-display);
     font-size: 2.25rem; font-weight: 300;
     letter-spacing: 0; text-transform: none;
+    min-width: 14rem; justify-content: center;
+    padding: 0.5rem 1.75rem;
   }
   .no-js .site-nav ul { gap: var(--s-2); }
   .no-js .brand__name { display: none; }

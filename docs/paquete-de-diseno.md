@@ -80,7 +80,8 @@ Contraste medido con la fórmula WCAG. Mínimo para texto normal: 4,5:1.
 | Rol | Fuente | Pesos |
 |---|---|---|
 | Títulos (serif editorial) | **Fraunces** (variable) | 300, 600 |
-| Texto y menú (sans moderna) | **Manrope** | 400, 500, 600 |
+| Texto (sans moderna) | **Manrope** | 400, 500, 600 |
+| Botones del menú (sans técnica) | **Space Grotesk** (variable, desde 2026-11-07) | 500 |
 | Etiquetas de datos (solo escena 04) | **IBM Plex Mono** | 400 |
 
 - Alternativa: Newsreader + Instrument Sans.
