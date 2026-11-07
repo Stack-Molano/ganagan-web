@@ -8,11 +8,19 @@
   <meta name="theme-color" content="#161815">
   <link rel="icon" type="image/svg+xml" href="./assets/icons/ganagan-isotipo-marfil.svg">
 
-  <!-- PASO DE DESPLIEGUE: sustituir por URLs absolutas cuando exista la dirección de GitHub Pages. -->
+  <!-- Vista previa al compartir el enlace (WhatsApp, redes). Dirección pública de GitHub Pages. -->
+  <link rel="canonical" href="https://stack-molano.github.io/ganagan-web/">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_CO">
+  <meta property="og:site_name" content="Ganagán">
+  <meta property="og:url" content="https://stack-molano.github.io/ganagan-web/">
   <meta property="og:title" content="Ganagán · Tradición que evoluciona">
   <meta property="og:description" content="Tradición que evoluciona. Inteligencia que produce.">
-  <meta property="og:image" content="./assets/images/territorio-final-1280.webp">
+  <meta property="og:image" content="https://stack-molano.github.io/ganagan-web/assets/images/og-ganagan-1200x630.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Sabana de los Llanos Orientales al amanecer con un hato de ganado Brahman.">
+  <meta name="twitter:card" content="summary_large_image">
 
   <link rel="preload" as="image" type="image/webp"
         href="./assets/images/territorio-movil-864.webp"
@@ -21,7 +29,7 @@
         imagesrcset="./assets/images/territorio-hero-960.webp 960w, ./assets/images/territorio-hero-1672.webp 1672w"
         imagesizes="100vw" media="(min-width: 768px)">
 
-  <link rel="stylesheet" href="./css/styles.css?v=2026-11-07m">
+  <link rel="stylesheet" href="./css/styles.css?v=2026-11-07n">
   <script>document.documentElement.classList.replace('no-js', 'js');</script>
 </head>
 <body>
@@ -308,9 +316,14 @@
           <header class="contacto__header">
             <p class="eyebrow">Contáctenos</p>
             <h3 class="contacto__title">Hablemos.</h3>
-            <p class="contacto__text">Déjenos sus datos y nos pondremos en contacto.</p>
+            <p class="contacto__text">Escríbanos por WhatsApp y le responderemos.</p>
           </header>
-          <form class="contacto__form" data-contact-form action="https://formspree.io/f/xeaawpqv" method="POST">
+          <a class="boton boton--whatsapp" href="https://wa.me/573202076074?text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Ganag%C3%A1n."
+             target="_blank" rel="noopener">Escribir por WhatsApp</a>
+          <!-- FORMULARIO DESACTIVADO hasta completar la política de datos (NIT, domicilio y correo).
+               Para activarlo: quitar el atributo «hidden» del formulario, eliminar el enlace de WhatsApp de
+               arriba (o dejarlo como alternativa) y volver al texto «Déjenos sus datos y nos pondremos en contacto.». -->
+          <form class="contacto__form" hidden data-contact-form action="https://formspree.io/f/xeaawpqv" method="POST">
             <div class="campo">
               <label for="cf-nombre">Nombre o empresa</label>
               <input id="cf-nombre" name="nombre" type="text" autocomplete="name" required maxlength="120">
@@ -371,6 +384,6 @@
     <p class="container site-footer__copy">© <span data-year>2026</span> Inversiones Ganagán M&amp;V S.A.S. Imágenes ilustrativas.</p>
   </footer>
 
-  <script src="./js/main.js?v=2026-11-07m" defer></script>
+  <script src="./js/main.js?v=2026-11-07n" defer></script>
 </body>
 </html>

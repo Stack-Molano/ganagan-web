@@ -988,6 +988,15 @@ a { color: inherit; }
   text-align: left;
 }
 .contacto__header { text-align: center; margin-bottom: var(--s-6); }
+[hidden] { display: none !important; }
+.contacto { display: grid; }
+.contacto .boton--whatsapp {
+  justify-self: center;
+  display: inline-flex; align-items: center; gap: var(--s-1);
+  text-decoration: none;
+}
+.boton--whatsapp::after { content: "→"; font-family: var(--font-ui); transition: transform .3s var(--ease); }
+.boton--whatsapp:hover::after { transform: translateX(4px); }
 .contacto__header .eyebrow { margin-bottom: var(--s-2); }
 .contacto__title {
   font-family: var(--font-display);
@@ -1079,7 +1088,7 @@ a { color: inherit; }
 .boton:disabled { opacity: .6; cursor: progress; }
 .contacto__estado { min-height: 1.5em; font-size: var(--fs-small); color: var(--arena); }
 .contacto__estado.is-error { color: #E0A07A; }
-@media (max-width: 767px) { .boton { justify-self: stretch; } }
+@media (max-width: 767px) { .boton, .contacto .boton--whatsapp { justify-self: stretch; justify-content: center; } }
 
 /* Página de política de datos (politica-de-datos.html) */
 .pagina-legal .site-nav ul { display: flex; }
