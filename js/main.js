@@ -36,7 +36,7 @@
       }
     });
     // Si se agranda la ventana con el menú abierto, se cierra.
-    window.matchMedia('(min-width: 768px)').addEventListener('change', (mq) => {
+    window.matchMedia('(min-width: 1024px)').addEventListener('change', (mq) => {
       if (mq.matches) setMenu(false);
     });
   }
