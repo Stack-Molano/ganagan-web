@@ -841,10 +841,23 @@ a { color: inherit; }
 }
 .scene--proposito::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
-  background: linear-gradient(to top,
-    color-mix(in srgb, var(--bosque) 92%, transparent) 0%,
-    color-mix(in srgb, var(--bosque) 60%, transparent) 35%,
-    transparent 65%);
+  background:
+    /* Arriba: la cabecera y el «05 · Nuestro propósito» se leen sobre el cielo */
+    linear-gradient(to bottom,
+      color-mix(in srgb, var(--grafito) 62%, transparent) 0%,
+      color-mix(in srgb, var(--grafito) 30%, transparent) 22%,
+      transparent 40%),
+    /* Izquierda: respaldo suave para el bloque de texto */
+    linear-gradient(to right,
+      color-mix(in srgb, var(--grafito) 40%, transparent) 0%,
+      transparent 55%),
+    linear-gradient(to top,
+      color-mix(in srgb, var(--bosque) 92%, transparent) 0%,
+      color-mix(in srgb, var(--bosque) 60%, transparent) 35%,
+      transparent 65%);
+}
+.scene--proposito .eyebrow {
+  text-shadow: 0 1px 14px color-mix(in srgb, var(--grafito) 80%, transparent);
 }
 .proposito__content {
   width: 100%;
