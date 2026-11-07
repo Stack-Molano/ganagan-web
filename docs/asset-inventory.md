@@ -20,9 +20,11 @@ Actualizado: 2026-11-05.
 | POSTER | `assets/images/territorio-poster-1280.webp` | 1280×720 | 71 KB | Primer fotograma de VID-01 | — | 01 Territorio | `poster` del video; coincide exactamente con su inicio |
 | FINAL | `assets/images/territorio-final-1280.webp` | 1280×720 | 57 KB | Último fotograma de VID-01 | — | 01 Territorio | Fotograma de llegada; base para la imagen de vista previa (Open Graph) |
 | IMG-02A | `assets/images/esencia-toro-1122.webp` · `-700.webp` | 1122×1402 · 700×874 | 134 KB · 70 KB | ChatGPT | `IMG-02A.png` | 02 Esencia | Toro Brahman rojo |
-| IMG-02B | `assets/images/esencia-oficio-1254.webp` · `-700.webp` | 1254×1254 · 700×700 | 160 KB · 67 KB | ChatGPT | `IMG-02B.png` → `IMG-02B-retocada.png` | 02 Esencia | Retoque: se eliminó un objeto metálico del antebrazo |
-| IMG-02C | `assets/images/esencia-hato-1536.webp` · `-960.webp` | 1536×1024 · 960×640 | 155 KB · 80 KB | ChatGPT | `IMG-02C.png` | 02 Esencia | Hato y jinete llanero |
-| IMG-03 | `assets/images/vision-ladera-1560.webp` · `-960.webp` | 1560×822 · 960×506 | 170 KB · 76 KB | ChatGPT | `IMG-03.png` → `IMG-03-retocada.png` | 03 Visión | Recorte: se eliminó un galpón con corral (instalación concreta) |
+| IMG-02B | `assets/images/esencia-oficio-1254.webp` · `-700.webp` | 1254×1254 · 700×700 | 160 KB · 67 KB | ChatGPT | `IMG-02B.png` → `IMG-02B-retocada.png` | — | Sin uso desde el rediseño de la escena 02 (2026-11-07). Retoque: se eliminó un objeto metálico del antebrazo |
+| IMG-02C | `assets/images/esencia-hato-1536.webp` · `-960.webp` | 1536×1024 · 960×640 | 155 KB · 80 KB | ChatGPT | `IMG-02C.png` | — | Sin uso desde el rediseño de la escena 02 (2026-11-07). Hato y jinete llanero |
+| IMG-07 | `assets/images/esencia-dron-1536.webp` · `-960.webp` | 1536×1024 · 960×640 | 111 KB · 61 KB | ChatGPT | `IMG-07-dron.png` | 02 Esencia | Tarjeta «Monitoreo aéreo»: dron sobre el hato |
+| IMG-08 | `assets/images/esencia-agrotech-1536.webp` · `-960.webp` | 1536×1024 · 960×640 | 135 KB · 72 KB | ChatGPT | `IMG-08-agrotech.png` | 02 Esencia | Tarjeta «Agrotecnología»: sensor de suelo, tablet y estación solar |
+| IMG-03 | `assets/images/vision-ladera-1560.webp` · `-960.webp` | 1560×822 · 960×506 | 170 KB · 76 KB | ChatGPT | `IMG-03.png` → `IMG-03-retocada.png` | 03 Visión | Respaldo del video en móvil y con movimiento reducido. Recorte: se eliminó un galpón con corral (instalación concreta) |
 | IMG-05H | `assets/images/proposito-horizonte-1672.webp` · `-960.webp` | 1672×942 · 960×540 | 159 KB · 70 KB | ChatGPT | `IMG-05.png` | 05 Propósito | Santander, montañas |
 | IMG-05V | `assets/images/proposito-movil-864.webp` · `-540.webp` | 864×1536 · 540×960 | 154 KB · 69 KB | ChatGPT | `IMG-05V.png` | 05 Propósito | Versión móvil. Recortada de 2:3 a 9:16 |
 
@@ -31,6 +33,7 @@ Actualizado: 2026-11-05.
 | ID | Archivo publicado | Formato | Peso | Origen | Original | Escena | Alternativa |
 |---|---|---|---|---|---|---|---|
 | VID-01 | `assets/videos/territorio-scrub.mp4` | H.264, 1280×720, 24 fps, 10 s, sin audio | 4,6 MB | Gemini, imagen a video desde IMG-01H | `VID-01.mp4` | 01 Territorio | POSTER en escritorio; IMG-01V en móvil y con movimiento reducido |
+| VID-03 | `assets/videos/vision-scrub.mp4` | H.264, 1280×720, 24 fps, 7,9 s, sin audio, CRF 25 | 4,8 MB | Google Flow (Veo), imagen a video desde IMG-03 | `VID-3.mp4` | 03 Visión | IMG-03 en móvil y con movimiento reducido |
 
 Codificación para scroll: fotograma clave cada 8 fotogramas (30 en total), CRF 20, `faststart`. Se eliminó la pista de audio del original. Solo se carga en escritorio.
 

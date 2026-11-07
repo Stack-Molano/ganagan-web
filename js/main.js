@@ -192,54 +192,82 @@
     propositoMedia.style.setProperty('--p', progress(proposito, 1, 0.25).toFixed(3));
   };
 
-  /* --- Escena 01: video controlado por el scroll (solo escritorio) --- */
-  const hero = document.querySelector('[data-hero]');
-  const video = hero && hero.querySelector('[data-hero-video]');
+  /* --- Video controlado por el scroll (solo escritorio) ---
+     Pieza común para la escena 01 y la escena 03. Con la clase `cls` la
+     sección se alarga, su contenido queda fijo y el scroll recorre el video.
+     `prop` es la variable CSS con el progreso 0→1. El video se descarga
+     cuando la sección está a menos de dos pantallas. */
   const desktopQuery = window.matchMedia('(min-width: 1024px)');
-  const scrub = { on: false, target: 0, current: 0, seeking: false, raf: null };
 
-  const heroProgress = () => {
-    const r = hero.getBoundingClientRect();
-    const travel = r.height - window.innerHeight;          // recorrido fijo
-    return travel > 0 ? clamp(-r.top / travel) : 0;
-  };
+  const makeScrub = (section, cls, prop) => {
+    const video = section && section.querySelector('[data-scrub-video]');
+    const s = { on: false, target: 0, current: 0, seeking: false, raf: null };
+    if (!video) return { on: false, start() {}, stop() {}, update() {}, progress: () => 0 };
 
-  // Suavizado: el tiempo mostrado persigue al objetivo y solo se pide
-  // una nueva posición cuando el navegador terminó la anterior.
-  const scrubStep = () => {
-    scrub.raf = null;
-    if (!scrub.on || !video.duration) return;
-    scrub.current += (scrub.target - scrub.current) * 0.18;
-    if (Math.abs(scrub.target - scrub.current) < 0.002) scrub.current = scrub.target;
-    if (!scrub.seeking && Math.abs(video.currentTime - scrub.current) > 0.01) {
-      scrub.seeking = true;
-      video.currentTime = scrub.current;
-    }
-    if (scrub.current !== scrub.target || scrub.seeking) scrub.raf = requestAnimationFrame(scrubStep);
-  };
-  const kickScrub = () => { if (!scrub.raf) scrub.raf = requestAnimationFrame(scrubStep); };
+    const progress = () => {
+      const r = section.getBoundingClientRect();
+      const travel = r.height - window.innerHeight;       // recorrido fijo
+      return travel > 0 ? clamp(-r.top / travel) : 0;
+    };
+    // Suavizado: el tiempo mostrado persigue al objetivo y solo se pide
+    // una nueva posición cuando el navegador terminó la anterior.
+    const step = () => {
+      s.raf = null;
+      if (!s.on || !video.duration) return;
+      s.current += (s.target - s.current) * 0.18;
+      if (Math.abs(s.target - s.current) < 0.002) s.current = s.target;
+      if (!s.seeking && Math.abs(video.currentTime - s.current) > 0.01) {
+        s.seeking = true;
+        video.currentTime = s.current;
+      }
+      if (s.current !== s.target || s.seeking) s.raf = requestAnimationFrame(step);
+    };
+    const kick = () => { if (!s.raf) s.raf = requestAnimationFrame(step); };
+    // Si algo falla, vuelve la imagen fija y el scroll no se congela.
+    const fail = () => {
+      s.seeking = false;
+      s.on = false;
+      section.classList.remove(cls);
+      section.style.removeProperty(prop);
+    };
+    const load = () => {
+      if (video.getAttribute('src')) return;
+      video.src = video.dataset.src;
+      video.preload = 'auto';
+      video.load();
+    };
 
-  const updateHero = () => {
-    if (!hero || !scrub.on) return;
-    const p = heroProgress();
-    hero.style.setProperty('--hp', p.toFixed(3));
-    if (video.duration) {
-      scrub.target = p * (video.duration - 0.05);
-      kickScrub();
-    }
-  };
+    s.progress = progress;
+    s.update = () => {
+      if (!s.on) return;
+      if (section.getBoundingClientRect().top < window.innerHeight * 2) load();
+      if (!inView(section)) return;
+      const p = progress();
+      section.style.setProperty(prop, p.toFixed(3));
+      if (video.duration) {
+        s.target = p * (video.duration - 0.05);
+        kick();
+      }
+    };
+    s.start = () => {
+      if (s.on) return;
+      s.on = true;
+      section.classList.add(cls);
+      video.pause();
+      s.update();
+    };
+    s.stop = () => {
+      if (!s.on) return;
+      s.on = false;
+      section.classList.remove(cls);
+      section.style.removeProperty(prop);
+    };
 
-  if (video) {
-    video.addEventListener('seeked', () => { scrub.seeking = false; kickScrub(); });
-    // Si una búsqueda falla, se libera el bloqueo para que el scroll no se congele.
-    video.addEventListener('error', () => {
-      scrub.seeking = false;
-      hero.classList.remove('hero--scrub');   // vuelve la imagen fija
-      scrub.on = false;
-    });
+    video.addEventListener('seeked', () => { s.seeking = false; kick(); });
+    video.addEventListener('error', fail);
     video.addEventListener('loadeddata', () => {
       video.classList.add('is-ready');
-      updateHero();
+      s.update();
     });
     // Respaldo: si el servidor no admite solicitudes parciales (HTTP Range),
     // el video no se puede recorrer. Entonces se descarga completo una vez
@@ -254,30 +282,36 @@
         video.src = URL.createObjectURL(blob);
         video.load();
       } catch (err) {
-        hero.classList.remove('hero--scrub');   // queda la imagen fija
-        scrub.on = false;
+        fail();
       }
     });
-  }
+    return s;
+  };
 
-  const startScrub = () => {
-    if (!video || scrub.on) return;
-    scrub.on = true;
-    hero.classList.add('hero--scrub');
-    if (!video.getAttribute('src')) {
-      video.src = video.dataset.src;
-      video.preload = 'auto';
-      video.load();
-    }
-    video.pause();
-    updateHero();
+  /* Escena 01 · portada */
+  const hero = document.querySelector('[data-hero]');
+  const heroScrub = makeScrub(hero, 'hero--scrub', '--hp');
+
+  /* Transición 01 → 02: --fx (0→1) desenfoca y oscurece la portada al salir.
+     Con video, en el último tramo del recorrido fijo; sin video, mientras
+     la portada sube y deja la pantalla. */
+  const updateHeroExit = () => {
+    if (!hero || !inView(hero)) return;
+    let fx;
+    if (heroScrub.on) fx = clamp((heroScrub.progress() - 0.78) / 0.22);
+    else fx = clamp(-hero.getBoundingClientRect().top / (window.innerHeight * 0.8));
+    hero.style.setProperty('--fx', fx.toFixed(3));
   };
-  const stopScrub = () => {
-    if (!video || !scrub.on) return;
-    scrub.on = false;
-    hero.classList.remove('hero--scrub');
-    hero.style.removeProperty('--hp');
+  const updateHero = () => {
+    updateHeroExit();
+    heroScrub.update();
   };
+
+  /* Escena 03 · praderas y silvopastoreo */
+  const visionScrub = makeScrub(document.querySelector('[data-vision-stage]'), 'vision--scrub', '--vp');
+
+  const startScrub = () => { heroScrub.start(); visionScrub.start(); };
+  const stopScrub = () => { heroScrub.stop(); visionScrub.stop(); };
   const syncScrub = () => {
     if (motionQuery.matches && desktopQuery.matches) startScrub();
     else stopScrub();
@@ -291,6 +325,7 @@
     frame = requestAnimationFrame(() => {
       frame = null;
       updateHero();
+      visionScrub.update();
       updateVision();
       updateVariables();
       updateProposito();
