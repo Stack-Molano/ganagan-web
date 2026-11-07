@@ -638,6 +638,62 @@
   if (motionQuery.matches) enableMotion();
   motionQuery.addEventListener('change', (e) => (e.matches ? enableMotion() : disableMotion()));
 
+  /* ---------- Formulario de contacto ----------
+     Se envía a Formspree sin salir de la página. Un solo campo admite
+     correo o teléfono; si es correo, se manda también como «email» para
+     poder responder directamente. Sin JavaScript, el formulario se envía
+     de forma normal y Formspree muestra su página de confirmación. */
+  const contactForm = document.querySelector('[data-contact-form]');
+  if (contactForm && window.fetch) {
+    const status = contactForm.querySelector('[data-contact-status]');
+    const button = contactForm.querySelector('button[type="submit"]');
+    const contactField = contactForm.elements.contacto;
+    // La validación la hace este código (que también revisa correo o teléfono)
+    contactForm.noValidate = true;
+    const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+    const isPhone = (v) => /^\+?[\d\s().-]{7,20}$/.test(v) && v.replace(/\D/g, '').length >= 7;
+    const say = (text, error = false) => {
+      status.textContent = text;
+      status.classList.toggle('is-error', error);
+    };
+
+    contactField.addEventListener('input', () => {
+      contactField.setCustomValidity('');
+      contactField.removeAttribute('aria-invalid');
+    });
+
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const value = contactField.value.trim();
+      const valid = isEmail(value) || isPhone(value);
+      contactField.setCustomValidity(valid ? '' : 'Escriba un correo válido o un teléfono de al menos 7 dígitos.');
+      if (valid) contactField.removeAttribute('aria-invalid');
+      else contactField.setAttribute('aria-invalid', 'true');
+      if (!contactForm.checkValidity()) {
+        contactForm.reportValidity();
+        return;
+      }
+      if (contactForm.action.includes('PENDIENTE')) {
+        say('El formulario todavía no está conectado. Pronto podrá enviarnos sus datos desde aquí.', true);
+        return;
+      }
+      const data = new FormData(contactForm);
+      if (isEmail(value)) data.set('email', value);
+      button.disabled = true;
+      say('Enviando…');
+      try {
+        const res = await fetch(contactForm.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error(res.status);
+        contactForm.reset();
+        say('Gracias. Recibimos sus datos y nos pondremos en contacto pronto.');
+      } catch (err) {
+        say('No pudimos enviar el formulario. Inténtelo de nuevo en unos minutos.', true);
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+
   /* ---------- Año del pie de página ---------- */
   const year = document.querySelector('[data-year]');
   if (year) year.textContent = String(new Date().getFullYear());

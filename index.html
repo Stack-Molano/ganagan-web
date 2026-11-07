@@ -21,7 +21,7 @@
         imagesrcset="./assets/images/territorio-hero-960.webp 960w, ./assets/images/territorio-hero-1672.webp 1672w"
         imagesizes="100vw" media="(min-width: 768px)">
 
-  <link rel="stylesheet" href="./css/styles.css?v=2026-11-07i">
+  <link rel="stylesheet" href="./css/styles.css?v=2026-11-07l">
   <script>document.documentElement.classList.replace('no-js', 'js');</script>
 </head>
 <body>
@@ -302,6 +302,40 @@
         <img class="identidad__logo" data-reveal="clip" src="./assets/icons/ganagan-logo-marfil.svg" width="1085" height="1449" loading="lazy"
              alt="Logotipo de Inversiones Ganagán">
         <h2 class="identidad__claim" id="t-identidad" data-reveal style="--d:900">GANAGÁN. <span>Tradición que evoluciona.</span></h2>
+        <!-- Formulario de contacto. Los envíos llegan por Formspree.
+             Formulario de Formspree: xeaawpqv (cuenta de Ganagán). -->
+        <div class="contacto" data-reveal>
+          <header class="contacto__header">
+            <p class="eyebrow">Contáctenos</p>
+            <h3 class="contacto__title">Hablemos.</h3>
+            <p class="contacto__text">Déjenos sus datos y nos pondremos en contacto.</p>
+          </header>
+          <form class="contacto__form" data-contact-form action="https://formspree.io/f/xeaawpqv" method="POST">
+            <div class="campo">
+              <label for="cf-nombre">Nombre o empresa</label>
+              <input id="cf-nombre" name="nombre" type="text" autocomplete="name" required maxlength="120">
+            </div>
+            <div class="campo">
+              <label for="cf-contacto">Correo electrónico o teléfono</label>
+              <input id="cf-contacto" name="contacto" type="text" inputmode="email" autocomplete="email" required maxlength="120"
+                     aria-describedby="cf-contacto-ayuda">
+              <p class="campo__ayuda" id="cf-contacto-ayuda">Cualquiera de los dos.</p>
+            </div>
+            <!-- Trampa para robots: las personas no ven este campo -->
+            <div class="campo campo--trampa" aria-hidden="true">
+              <label for="cf-web">No llenar</label>
+              <input id="cf-web" name="_gotcha" type="text" tabindex="-1" autocomplete="off">
+            </div>
+            <div class="casilla">
+              <input id="cf-datos" name="acepta_tratamiento_datos" type="checkbox" value="sí" required>
+              <label for="cf-datos">Acepto el tratamiento de mis datos personales conforme a la Ley 1581 de 2012 y la
+                <a href="./politica-de-datos.html" target="_blank" rel="noopener">Política de tratamiento de datos</a> de Inversiones Ganagán.</label>
+            </div>
+            <button class="boton" type="submit">Enviar</button>
+            <p class="contacto__estado" data-contact-status role="status" aria-live="polite"></p>
+          </form>
+        </div>
+
         <nav class="scene-next scene-next--home" aria-label="Volver al inicio">
           <a href="#inicio">
             <span class="scene-next__label">Volver</span>
@@ -337,6 +371,6 @@
     <p class="container site-footer__copy">© <span data-year>2026</span> Inversiones Ganagán M&amp;V S.A.S. Imágenes ilustrativas.</p>
   </footer>
 
-  <script src="./js/main.js?v=2026-11-07i" defer></script>
+  <script src="./js/main.js?v=2026-11-07l" defer></script>
 </body>
 </html>

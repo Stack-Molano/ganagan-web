@@ -980,6 +980,146 @@ a { color: inherit; }
 /* Enlace del menú de la escena actual: queda subrayado */
 .site-nav a[aria-current="page"] { background-size: 100% 1px; }
 
+/* ---------- 6c. Formulario de contacto (escena 06) ---------- */
+.contacto {
+  width: 100%;
+  max-width: 34rem;
+  margin-top: var(--s-8);
+  text-align: left;
+}
+.contacto__header { text-align: center; margin-bottom: var(--s-6); }
+.contacto__header .eyebrow { margin-bottom: var(--s-2); }
+.contacto__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  font-weight: 300;
+  line-height: 1.05;
+}
+.contacto__text {
+  margin-top: var(--s-2);
+  color: color-mix(in srgb, var(--marfil) 78%, transparent);
+}
+.contacto__form { display: grid; gap: var(--s-4); }
+
+.campo { display: grid; gap: var(--s-1); }
+.campo label {
+  font-family: var(--font-ui);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--arena);
+}
+.campo input {
+  width: 100%;
+  padding: 0.75rem 0;
+  font: inherit;
+  font-size: var(--fs-body);
+  color: var(--marfil);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--marfil) 30%, transparent);
+  border-radius: 0;
+  transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+.campo input:hover { border-bottom-color: color-mix(in srgb, var(--marfil) 55%, transparent); }
+.campo input:focus { outline: none; border-bottom-color: var(--arena); box-shadow: 0 1px 0 0 var(--arena); }
+.campo input:focus-visible { outline: none; }
+.campo input[aria-invalid="true"] { border-bottom-color: #E0A07A; box-shadow: 0 1px 0 0 #E0A07A; }
+.campo__ayuda { font-size: var(--fs-label); color: var(--piedra); }
+/* Autocompletado del navegador: sin el fondo azul claro de Chrome */
+.campo input:-webkit-autofill,
+.campo input:-webkit-autofill:hover,
+.campo input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--marfil);
+  caret-color: var(--marfil);
+  -webkit-box-shadow: 0 0 0 1000px var(--grafito) inset;
+  box-shadow: 0 0 0 1000px var(--grafito) inset;
+  transition: background-color 9999s ease-out 0s;
+}
+.campo input:autofill { background: transparent; }
+/* Trampa para robots: fuera de la vista, pero no oculta con display:none */
+.campo--trampa { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.casilla {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--s-2);
+  align-items: start;
+  font-size: var(--fs-small);
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--marfil) 80%, transparent);
+}
+.casilla input {
+  width: 1.15rem; height: 1.15rem;
+  margin: 0.2rem 0 0;
+  accent-color: var(--arena);
+  cursor: pointer;
+}
+.casilla label { cursor: pointer; }
+.casilla a { color: var(--arena); text-underline-offset: 3px; }
+
+.boton {
+  justify-self: start;
+  padding: 0.95rem 2.25rem;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--grafito);
+  background: var(--arena);
+  border: 1px solid var(--arena);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color .3s var(--ease), color .3s var(--ease), transform .3s var(--ease);
+}
+.boton:hover { background: var(--marfil); border-color: var(--marfil); }
+.boton:active { transform: translateY(1px); }
+.boton:disabled { opacity: .6; cursor: progress; }
+.contacto__estado { min-height: 1.5em; font-size: var(--fs-small); color: var(--arena); }
+.contacto__estado.is-error { color: #E0A07A; }
+@media (max-width: 767px) { .boton { justify-self: stretch; } }
+
+/* Página de política de datos (politica-de-datos.html) */
+.pagina-legal .site-nav ul { display: flex; }
+@media (max-width: 559px) { .pagina-legal .brand__name { display: none; } }
+.legal {
+  max-width: 46rem;
+  padding-top: calc(var(--header-h) + var(--s-8));
+  padding-bottom: var(--s-12);
+  color: color-mix(in srgb, var(--marfil) 86%, transparent);
+}
+.legal__borrador {
+  margin-bottom: var(--s-6);
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid #E0A07A;
+  border-radius: 4px;
+  font-size: var(--fs-small);
+  color: #E0A07A;
+}
+.legal__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  font-weight: 300;
+  line-height: 1.08;
+  color: var(--marfil);
+}
+.legal__meta { margin-top: var(--s-2); font-size: var(--fs-small); color: var(--piedra); }
+.legal h2 {
+  margin-top: var(--s-6);
+  margin-bottom: var(--s-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  color: var(--marfil);
+}
+.legal p + p { margin-top: var(--s-2); }
+.legal ul { display: grid; gap: var(--s-1); margin-block: var(--s-2); padding-left: var(--s-3); list-style: disc; }
+.legal li::marker { color: var(--arena); }
+.legal a { color: var(--arena); }
+.legal__volver { margin-top: var(--s-8); }
+
 /* ---------- 7. Pie de página ---------- */
 .site-footer {
   border-top: var(--line);
