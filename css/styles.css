@@ -1136,6 +1136,14 @@ a { color: inherit; }
   margin-bottom: var(--s-1);
 }
 .site-footer__legal { color: var(--marfil); }
+.site-footer__link {
+  color: var(--marfil);
+  text-decoration: none;
+  background: linear-gradient(var(--arena), var(--arena)) no-repeat left bottom / 0 1px;
+  transition: background-size .35s var(--ease), color .35s var(--ease);
+}
+.site-footer__link:hover,
+.site-footer__link:focus-visible { color: var(--arena); background-size: 100% 1px; }
 .site-footer__copy { margin-top: var(--s-8); font-size: var(--fs-label); }
 @media (min-width: 768px) { .site-footer__grid { grid-template-columns: 1.4fr repeat(3, 1fr); } }
 
